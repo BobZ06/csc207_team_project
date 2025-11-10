@@ -4,13 +4,10 @@ public class MenuItem {
     private String name;
     private float price;
     private String description;
-    private String type;
-    // private final int rating; (NOT SURE IF WE HAVE RATINGS FOR ITEMS)
 
-    public MenuItem(String name, float price, String description, String type) {
+    public MenuItem(String name, float price, String description) {
         this.name = name;
         this.price = price;
-        this.type = type;
         this.description = description;
     }
 
@@ -26,10 +23,6 @@ public class MenuItem {
         return this.description;
     }
 
-    public String getType() {
-        return this.type;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -40,9 +33,5 @@ public class MenuItem {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

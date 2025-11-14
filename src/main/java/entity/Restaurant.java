@@ -27,7 +27,7 @@ public class Restaurant {
         }
     }
 
-    public float getAverageRating(int rating) {
+    public float getAverageRating() {
         if (ratingsList.isEmpty()) {
             return 0.0f;
         }

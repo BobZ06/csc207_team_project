@@ -81,6 +81,6 @@ public class ConfigManager {
      */
     public static boolean isConfigured() {
         String key = getRapidApiKey();
-        return key != null && !key.isEmpty());
+        return key != null && !key.isEmpty();
     }
 }

@@ -21,6 +21,7 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
     private static final String API_HOST = "api.yelp.com";
 
     public YelpRestaurantSearchService() {
+        // Set timeout to 30 seconds
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -30,7 +31,7 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
         this.apiKey = ConfigManager.getYelpApiKey();
 
         if (apiKey == null || apiKey.isEmpty()) {
-            System.err.println("Yelp API Key is missing.");
+            System.err.println("Yelp API Key is missing in config.");
         }
     }
 
@@ -38,6 +39,7 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
     public List<Restaurant> searchRestaurants(float latitude, float longitude, String term, int limit)
             throws RestaurantSearchException {
 
+        // Build the URL
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
                 .scheme("https")
                 .host(API_HOST)
@@ -49,6 +51,38 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
                 .addQueryParameter("limit", String.valueOf(limit))
                 .addQueryParameter("sort_by", "best_match");
 
+        // Build the Request
+        Request request = new Request.Builder()
+                .url(urlBuilder.build())
+                .get()
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("accept", "application/json")
+                .build();
+
+        // Execute the Request
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new RestaurantSearchException("Yelp Search Error: " + response.code());
+            }
+
+            String responseBody = response.body().string();
+            return parseSearchResponse(responseBody);
+
+        } catch (IOException e) {
+            throw new RestaurantSearchException("Network error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Restaurant getRestaurantDetails(String restaurantId) throws RestaurantSearchException {
+        // Build the URL: https://api.yelp.com/v3/businesses/{id}
+        HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(API_HOST)
+                .addPathSegment("v3")
+                .addPathSegments("businesses")
+                .addPathSegment(restaurantId);
+
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
                 .get()
@@ -58,23 +92,52 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                String errorBody = response.body() != null ? response.body().string() : "null";
-                throw new RestaurantSearchException("Yelp API Error: " + response.code() + " - " + errorBody);
-            }
-
-            if (response.body() == null) {
-                throw new RestaurantSearchException("Empty response from Yelp API");
+                throw new RestaurantSearchException("Yelp Details Error: " + response.code());
             }
 
             String responseBody = response.body().string();
-            return parseResponse(responseBody);
+            JSONObject jsonObject = new JSONObject(responseBody);
+
+            // Use the helper method to parse the single business object
+            return parseRestaurantFromBusiness(jsonObject);
 
         } catch (IOException e) {
             throw new RestaurantSearchException("Network error: " + e.getMessage());
         }
     }
 
-    private List<Restaurant> parseResponse(String responseBody) {
+    @Override
+    public List<String> getRestaurantReviews(String restaurantId) throws RestaurantSearchException {
+        // Build the URL: https://api.yelp.com/v3/businesses/{id}/reviews
+        HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(API_HOST)
+                .addPathSegment("v3")
+                .addPathSegments("businesses")
+                .addPathSegment(restaurantId)
+                .addPathSegment("reviews");
+
+        Request request = new Request.Builder()
+                .url(urlBuilder.build())
+                .get()
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("accept", "application/json")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new RestaurantSearchException("Yelp Reviews Error: " + response.code());
+            }
+
+            String responseBody = response.body().string();
+            return parseReviewsResponse(responseBody);
+
+        } catch (IOException e) {
+            throw new RestaurantSearchException("Network error: " + e.getMessage());
+        }
+    }
+
+    private List<Restaurant> parseSearchResponse(String responseBody) {
         JSONObject jsonObject = new JSONObject(responseBody);
         List<Restaurant> restaurants = new ArrayList<>();
 
@@ -87,22 +150,43 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
         return restaurants;
     }
 
+    private List<String> parseReviewsResponse(String responseBody) {
+        JSONObject jsonObject = new JSONObject(responseBody);
+        List<String> reviews = new ArrayList<>();
+
+        if (jsonObject.has("reviews")) {
+            JSONArray reviewsArray = jsonObject.getJSONArray("reviews");
+            for (int i = 0; i < reviewsArray.length(); i++) {
+                JSONObject reviewObj = reviewsArray.getJSONObject(i);
+
+                String text = reviewObj.optString("text");
+                int rating = reviewObj.optInt("rating");
+                String userName = reviewObj.getJSONObject("user").optString("name");
+
+                // Format: "5/5 by User: Content..."
+                reviews.add(rating + "/5 by " + userName + ": \"" + text + "\"");
+            }
+        }
+        return reviews;
+    }
+
     private Restaurant parseRestaurantFromBusiness(JSONObject business) {
         String id = business.optString("id");
         String name = business.optString("name");
         float rating = (float) business.optDouble("rating", 0.0);
-        String price = business.optString("price", "$"); // 默认为 $
+        String price = business.optString("price", "$");
 
         String address = "";
         String zip = "";
         if (business.has("location")) {
             JSONObject loc = business.getJSONObject("location");
             zip = loc.optString("zip_code");
-
             JSONArray displayAddr = loc.optJSONArray("display_address");
+
             if (displayAddr != null && displayAddr.length() > 0) {
+                // Combine address lines
                 StringBuilder sb = new StringBuilder();
-                for(int j=0; j<displayAddr.length(); j++) {
+                for(int j = 0; j < displayAddr.length(); j++) {
                     if(j > 0) sb.append(", ");
                     sb.append(displayAddr.getString(j));
                 }
@@ -130,15 +214,9 @@ public class YelpRestaurantSearchService implements RestaurantSearchService {
             }
         }
 
+        // Create the Restaurant object
         Restaurant r = new Restaurant(id, name, address, zip, (float)price.length(), coords, type);
-
         r.addToRating((int)rating);
-
         return r;
-    }
-
-    @Override
-    public Restaurant getRestaurantDetails(String restaurantId) {
-        return null;
     }
 }

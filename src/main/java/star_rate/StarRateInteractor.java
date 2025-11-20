@@ -1,4 +1,5 @@
 package star_rate;
+import data_access.RestaurantSearchService;
 import entity.Restaurant;
 
 public class StarRateInteractor implements StarRateInputBoundary{
@@ -10,8 +11,8 @@ public class StarRateInteractor implements StarRateInputBoundary{
         this.dataAccess = data;
     }
 
-    public void execute(StarRateInputData inputData){
-        String restaurantId = inputData.getRestaurantId();
+    public void execute(StarRateInputData inputData) throws RestaurantSearchService.RestaurantSearchException {
+        String restaurantId = dataAccess.getCurrentRestaurantId();
 
         if (dataAccess.getRestaurantById(restaurantId) == null){
             outputBoundary.prepareFailView("Restaurant not found.");
@@ -23,7 +24,6 @@ public class StarRateInteractor implements StarRateInputBoundary{
 
             restaurant.addToRating(starRate);
             float newAverage = restaurant.getAverageRating();
-            dataAccess.save(restaurant);
 
             StarRateOutputData outputData = new StarRateOutputData(starRate, newAverage);
             outputBoundary.prepareSuccessView(outputData);

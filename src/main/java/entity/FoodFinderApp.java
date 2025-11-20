@@ -1,7 +1,8 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class FoodFinderApp {
@@ -21,7 +22,7 @@ public class FoodFinderApp {
         this.currentUser = currentUser;
     }
 
-    public list<Restaurant> getFullRestaurantlist() {
+    public List<Restaurant> getFullRestaurantlist() {
         return restaurantList;
     }
 
@@ -32,8 +33,8 @@ public class FoodFinderApp {
     public double getDistance(Restaurant restaurant) {
         float userX = currentUser.getCoords()[0];
         float userY = currentUser.getCoords()[1];
-        float restaurantX = restaurant.getCoords()[0];
-        float restaurantY = restaurant.getCoords()[1];
+        float restaurantX = restaurant.getCoords().get(0);
+        float restaurantY = restaurant.getCoords().get(1);
 
         float xSquared = (float) Math.pow(restaurantX - userX, 2);
         float ySquared = (float) Math.pow(restaurantY - userY, 2);
@@ -58,9 +59,9 @@ public class FoodFinderApp {
         sortedList.sort(new Comparator<Restaurant>() {
             @Override
             public int compare(Restaurant A, Restaurant B) {
-                double priceA = A.getPriceRange;
-                double priceB = B.getPriceRange;
-                return Double.compare(distA, distB);
+                double priceA = A.getPriceRange();
+                double priceB = B.getPriceRange();
+                return Double.compare(priceA, priceB);
             }
         });
         return sortedList;

@@ -12,7 +12,7 @@ public class StarRateInteractor implements StarRateInputBoundary{
     }
 
     public void execute(StarRateInputData inputData) throws RestaurantSearchService.RestaurantSearchException {
-        String restaurantId = dataAccess.getCurrentRestaurantId();
+        String restaurantId = inputData.getRestaurantId();
 
         if (dataAccess.getRestaurantById(restaurantId) == null){
             outputBoundary.prepareFailView("Restaurant not found.");

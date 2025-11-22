@@ -1,10 +1,9 @@
 # API Configuration for Food Finder Application
 # IMPORTANT: Copy this file to config.properties and add your API key.
 
-# RapidAPI Key (get from https://rapidapi.com)
-rapidapi.key = YOUR_RAPIDAPI_KEY_HERE
+# Yelp API Key (get from https://business.yelp.com/data/products/places-api/)
+yelp.api.key = YOUR_RAPIDAPI_KEY_HERE
 
 # API Hosts
 googlemaps.host = google-maps-api-free.p.rapidapi.com
-yelp.host = YelpAPIserg-osipchukV1.p.rapidapi.com
 documenu.host = documenu.p.rapidapi.com

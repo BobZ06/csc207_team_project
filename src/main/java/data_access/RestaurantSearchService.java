@@ -4,7 +4,7 @@ import entity.Restaurant;
 import java.util.List;
 
 /**
- * Interface for restaurant search and details services.
+ * Interface for restaurant search and details.
  */
 public interface RestaurantSearchService {
 
@@ -21,12 +21,19 @@ public interface RestaurantSearchService {
             throws RestaurantSearchException;
 
     /**
-     * Get detailed information and reviews for a specific restaurant.
+     * Get detailed information for a specific restaurant.
      * @param restaurantId for the restaurant (Yelp ID)
      * @return restaurant with detailed information
-     * @throws RestaurantSearchException if restaurant not found
      */
     Restaurant getRestaurantDetails(String restaurantId) throws RestaurantSearchException;
+
+    /**
+     * Get up to 3 reviews for a specific restaurant.
+     * @param restaurantId The Yelp Business ID
+     * @return A list of review strings (e.g., "5/5: Great food!")
+     * @throws RestaurantSearchException if the API call fails
+     */
+    List<String> getRestaurantReviews(String restaurantId) throws RestaurantSearchException;
 
     /**
      * Exception thrown when restaurant search operations fail.

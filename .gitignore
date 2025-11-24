@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### API Keys - NEVER commit!
+src/main/resources/config.properties

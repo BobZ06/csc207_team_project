@@ -36,7 +36,11 @@ public class ConfigManager {
         return key;
     }
 
-    public static String getGoogleMapsHost() {
-        return properties.getProperty("googlemaps.host", "google-maps-api-free.p.rapidapi.com");
+    public static String getGoogleApiKey() {
+        String key = properties.getProperty("google.api.key");
+        if (key == null || key.isEmpty()) {
+            System.err.println("The key is invalid.");
+        }
+        return key;
     }
 }

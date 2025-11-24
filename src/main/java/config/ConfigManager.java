@@ -29,18 +29,26 @@ public class ConfigManager {
     }
 
     public static String getYelpApiKey() {
-        String key = properties.getProperty("yelp.api.key");
-        if (key == null || key.isEmpty()) {
-            System.err.println("The key is invalid.");
-        }
-        return key;
+        return getProperty("yelp.api.key");
     }
 
     public static String getGoogleApiKey() {
-        String key = properties.getProperty("google.api.key");
-        if (key == null || key.isEmpty()) {
-            System.err.println("The key is invalid.");
+        return getProperty("google.api.key");
+    }
+
+    public static String getSpoonacularApiKey() {
+        return getProperty("spoonacular.api.key");
+    }
+
+    public static String getSpoonacularHost() {
+        return getProperty("spoonacular.host");
+    }
+
+    private static String getProperty(String keyName) {
+        String value = properties.getProperty(keyName);
+        if (value == null || value.isEmpty()) {
+            System.err.println("Warning: Key '" + keyName + "' is missing or invalid.");
         }
-        return key;
+        return value;
     }
 }

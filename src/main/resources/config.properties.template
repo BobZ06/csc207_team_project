@@ -8,3 +8,8 @@ yelp.api.key = YOUR_RAPIDAPI_KEY_HERE
 # Google Maps API Key
 # Get from: https://console.cloud.google.com/google/maps-apis/credentials
 google.api.key = YOUR_GOOGLE_MAPS_KEY_HERE
+
+# Spoonacular API Configuration
+# Get from: https://spoonacular.com/food-api
+spoonacular.api.key = YOUR_SPOONACULAR_KEY_HERE
+spoonacular.host = api.spoonacular.com

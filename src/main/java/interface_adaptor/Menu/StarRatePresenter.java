@@ -17,11 +17,15 @@ public class StarRatePresenter implements StarRateOutputBoundary {
     public void prepareSuccessView(StarRateOutputData output) {
         final MenuState menuState = menuModel.getState();
         menuState.setRating(output.getAverage());
+        menuState.setReviewError("");
         this.menuModel.firePropertyChange();
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
+        final MenuState menuState = menuModel.getState();
         System.out.println(errorMessage);
+        menuState.setReviewError(errorMessage);
+        this.menuModel.firePropertyChange();
     }
 }

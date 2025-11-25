@@ -31,6 +31,7 @@ import menu_search.MenuSearchOutputBoundary;
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
 import entity.Restaurant;
+import entity.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +99,7 @@ public class AppBuilder {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(
                 viewManagerModel, menuViewModel);
         final StarRateInputBoundary starRateInteractor = new StarRateInteractor(
-                starRateOutputBoundary, starRateDataAccessObject);
+                starRateOutputBoundary, starRateDataAccessObject, userDataAccessObject);
         StarRateController starRateController = new StarRateController(starRateInteractor);
         menuView.setStarRateController(starRateController);
 
@@ -110,14 +111,19 @@ public class AppBuilder {
         rest.setName("Burger King");
         rest.setAddress("220 Yonge Street");
 
+        User user = new User("Username", "Password");
+
         starRateDataAccessObject.save(rest.getId(), rest);
         starRateDataAccessObject.setCurrentRestaurantId(rest.getId());
+        userDataAccessObject.save(user);
+        userDataAccessObject.setCurrentUsername(user.getName());
 
         MenuState menuState = menuViewModel.getState();
         menuState.setName(rest.getName());
         menuState.setRestaurant(rest.getId());
         menuState.setAddress(rest.getAddress());
         menuState.setRating(rest.getAverageRating());
+        menuState.setUsername(user.getName());
         menuViewModel.firePropertyChange();
 
         // TEMP MENU

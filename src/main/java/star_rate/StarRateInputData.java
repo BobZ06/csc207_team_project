@@ -1,14 +1,13 @@
 package star_rate;
-import entity.Restaurant;
+import entity.User;
 
 public class StarRateInputData {
-    final private int starRating;
-    final private String restaurantId;
+    private final int starRating;
+    private final String restaurantId;
 
     public StarRateInputData(int rate, String restaurant){
         this.starRating = rate;
         this.restaurantId = restaurant;
-
     }
     public int getStarRating(){
         return this.starRating;

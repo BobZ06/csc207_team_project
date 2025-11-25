@@ -24,7 +24,7 @@ public class starRate {
         Restaurant rest = new Restaurant(10f, coords, "Burger", "1042");
         rest.setName("Burger King");
         rest.setAddress("220 Yonge Street");
-        dataAccess.addRestaurant(rest.getId(), rest);
+        dataAccess.save(rest.getId(), rest);
         dataAccess.setCurrentRestaurantId(rest.getId());
 
         // Create a new Output Boundary of what we expect to output.
@@ -53,7 +53,7 @@ public class starRate {
         Restaurant rest = new Restaurant(10f, coords, "Burger", "1042");
         rest.setName("Burger King");
         rest.setAddress("220 Yonge Street");
-        dataAccess.addRestaurant(rest.getId(), rest);
+        dataAccess.save(rest.getId(), rest);
         dataAccess.setCurrentRestaurantId("1042");
 
         // Create a new Output Boundary of what we expect to output.

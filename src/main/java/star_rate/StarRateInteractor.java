@@ -24,6 +24,7 @@ public class StarRateInteractor implements StarRateInputBoundary{
 
             restaurant.addToRating(starRate);
             float newAverage = restaurant.getAverageRating();
+            dataAccess.save(restaurantId, restaurant);
 
             StarRateOutputData outputData = new StarRateOutputData(starRate, newAverage);
             outputBoundary.prepareSuccessView(outputData);

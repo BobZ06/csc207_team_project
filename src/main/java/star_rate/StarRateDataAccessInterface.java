@@ -6,5 +6,5 @@ public interface StarRateDataAccessInterface {
     Restaurant getRestaurantById(String id) throws RestaurantSearchService.RestaurantSearchException;
     String getCurrentRestaurantId();
     void setCurrentRestaurantId(String id);
-    void addRestaurant(String id, Restaurant rest);
+    void save(String id, Restaurant rest);
 }

@@ -12,6 +12,7 @@ import interface_adaptor.ViewManagerModel;
 import log_in.LoginInputBoundary;
 import log_in.LoginInteractor;
 import log_in.LoginOutputBoundary;
+import star_rate.StarRateDataAccessInterface;
 import star_rate.StarRateInputBoundary;
 import star_rate.StarRateInteractor;
 import star_rate.StarRateOutputBoundary;
@@ -33,6 +34,7 @@ import entity.Restaurant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AppBuilder {
@@ -46,7 +48,7 @@ public class AppBuilder {
     final TempUserDataAccessObject userDataAccessObject = new TempUserDataAccessObject();
 
     // Data Access Object Temp Star Rate:
-    final TempStarRateDataAccessObject starRateDataAccessObject = new TempStarRateDataAccessObject();
+    final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
 
     // Data Access Object Temp Menu:
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
@@ -58,7 +60,7 @@ public class AppBuilder {
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
 
-    public AppBuilder() {
+    public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
     }
 
@@ -108,7 +110,7 @@ public class AppBuilder {
         rest.setName("Burger King");
         rest.setAddress("220 Yonge Street");
 
-        starRateDataAccessObject.addRestaurant(rest.getId(), rest);
+        starRateDataAccessObject.save(rest.getId(), rest);
         starRateDataAccessObject.setCurrentRestaurantId(rest.getId());
 
         MenuState menuState = menuViewModel.getState();
@@ -116,6 +118,7 @@ public class AppBuilder {
         menuState.setRestaurant(rest.getId());
         menuState.setAddress(rest.getAddress());
         menuState.setRating(rest.getAverageRating());
+        menuViewModel.firePropertyChange();
 
         // TEMP MENU
         menuDataAccessObject.addMenuItem(rest.getId(),

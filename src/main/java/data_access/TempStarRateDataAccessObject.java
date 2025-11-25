@@ -25,7 +25,7 @@ public class TempStarRateDataAccessObject implements StarRateDataAccessInterface
     }
 
     @Override
-    public void addRestaurant(String id, Restaurant rest) {
+    public void save(String id, Restaurant rest) {
         restaurants.put(id, rest);
     }
 }

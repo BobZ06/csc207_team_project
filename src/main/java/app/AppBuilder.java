@@ -8,17 +8,20 @@ import interface_adaptor.Login.LoginViewModel;
 import interface_adaptor.Menu.MenuViewModel;
 import interface_adaptor.Menu.StarRateController;
 import interface_adaptor.Menu.StarRatePresenter;
+import interface_adaptor.Signup.SignupController;
+import interface_adaptor.Signup.SignupPresenter;
+import interface_adaptor.Signup.SignupViewModel;
 import interface_adaptor.ViewManagerModel;
 import log_in.LoginInputBoundary;
 import log_in.LoginInteractor;
 import log_in.LoginOutputBoundary;
+import sign_up.SignupInputBoundary;
+import sign_up.SignupInteractor;
+import sign_up.SignupOutputBoundary;
 import star_rate.StarRateInputBoundary;
 import star_rate.StarRateInteractor;
 import star_rate.StarRateOutputBoundary;
-import view.BlankView;
-import view.LoginView;
-import view.MenuView;
-import view.ViewManager;
+import view.*;
 import entity.MenuItem;
 import interface_adaptor.Menu.MenuState;
 import interface_adaptor.Menu.MenuSearchController;
@@ -51,12 +54,16 @@ public class AppBuilder {
     // Data Access Object Temp Menu:
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
+
     private BlankView blankView;
+    private SignupView signupView;
+    private SignupViewModel signupViewModel;
     private LoginView loginView;
     private MenuView menuView;
     private BlankViewModel blankViewModel;
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
+
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -68,10 +75,20 @@ public class AppBuilder {
         cardPanel.add(blankView, blankView.getViewName());
         return this;
     }
+
+    public AppBuilder addSignupView() {
+        signupViewModel = new SignupViewModel();
+        signupView = new SignupView(signupViewModel);
+        cardPanel.add(signupView, signupView.getViewName());
+        return this;
+    }
+
     public AppBuilder addLoginView(){
         loginViewModel = new LoginViewModel();
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
+        loginViewModel.setViewManagerModel(viewManagerModel);
+
         return this;
     }
 
@@ -81,6 +98,15 @@ public class AppBuilder {
         cardPanel.add(menuView, menuView.getViewName());
         return this;
     }
+
+    public AppBuilder addSignupUseCase() {
+        SignupOutputBoundary output = new SignupPresenter(signupViewModel, viewManagerModel);
+        SignupInputBoundary interactor = new SignupInteractor(userDataAccessObject, output);
+        SignupController controller = new SignupController(interactor);
+        signupView.setSignupController(controller);
+        return this;
+    }
+
 
     public AppBuilder addLoginUseCase(){
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(
@@ -157,7 +183,8 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(menuView.getViewName());
+        viewManagerModel.setState(loginView.getViewName());
+
         viewManagerModel.firePropertyChange();
 
         return application;

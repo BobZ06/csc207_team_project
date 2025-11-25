@@ -25,6 +25,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     private final JButton logIn;
     private final JButton cancel;
+    private final JButton createAccount;
     private LoginController loginController = null;
 
     public LoginView(LoginViewModel loginViewModel) {
@@ -45,6 +46,19 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         buttons.add(logIn);
         cancel = new JButton("cancel");
         buttons.add(cancel);
+        createAccount = new JButton("Create Account");
+        buttons.add(createAccount);
+
+        createAccount.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(createAccount)) {
+                            loginViewModel.getViewManagerModel().setState("signup");
+                            loginViewModel.getViewManagerModel().firePropertyChange();
+                        }
+                    }
+                }
+        );
 
         logIn.addActionListener(
                 new ActionListener() {

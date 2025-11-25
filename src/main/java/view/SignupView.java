@@ -23,20 +23,29 @@ public class SignupView extends JPanel implements PropertyChangeListener {
         vm.addPropertyChangeListener(this);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         JLabel title = new JLabel("Sign Up");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel userPanel = new JPanel();
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         userPanel.add(new JLabel("Username:"));
         userPanel.add(usernameField);
 
-        JPanel passPanel = new JPanel();
+        JPanel passPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         passPanel.add(new JLabel("Password:"));
         passPanel.add(passwordField);
 
         JButton signupButton = new JButton("Create Account");
         signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        signupButton.setPreferredSize(new Dimension(150, 30));
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cancelButton.setPreferredSize(new Dimension(150, 30));
+
+
         signupButton.addActionListener(e -> {
             controller.execute(
                     usernameField.getText(),
@@ -44,14 +53,25 @@ public class SignupView extends JPanel implements PropertyChangeListener {
             );
         });
 
+        cancelButton.addActionListener(e -> {
+            viewModel.getViewManagerModel().setState("log in");
+            viewModel.getViewManagerModel().firePropertyChange();
+        });
+
         messageLabel.setForeground(Color.RED);
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        add(title);
-        add(userPanel);
-        add(passPanel);
-        add(signupButton);
-        add(messageLabel);
+        this.add(title);
+        this.add(Box.createVerticalStrut(20));
+        this.add(userPanel);
+        this.add(passPanel);
+        this.add(Box.createVerticalStrut(20));
+        this.add(signupButton);
+        this.add(Box.createVerticalStrut(10));
+        this.add(cancelButton);
+        this.add(Box.createVerticalStrut(10));
+        this.add(messageLabel);
+        this.add(Box.createVerticalGlue());
     }
 
     public void setSignupController(SignupController controller) {

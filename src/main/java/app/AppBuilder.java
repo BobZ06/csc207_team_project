@@ -80,6 +80,7 @@ public class AppBuilder {
         signupViewModel = new SignupViewModel();
         signupView = new SignupView(signupViewModel);
         cardPanel.add(signupView, signupView.getViewName());
+        signupViewModel.setViewManagerModel(viewManagerModel);
         return this;
     }
 

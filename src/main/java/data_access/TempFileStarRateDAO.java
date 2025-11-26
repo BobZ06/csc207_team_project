@@ -9,15 +9,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class APIStarRateDataAccessObject implements StarRateDataAccessInterface{
+public class TempFileStarRateDAO implements StarRateDataAccessInterface{
     private static final String HEADER = "restaurantId,reviewsData";
     private String currentRestaurantId;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
-    private RestaurantSearchService apiCall = new YelpRestaurantSearchService();
     private final Map<String, List<Integer>> restaurants = new HashMap<>();
+    private final Map<String, Restaurant> restaurants2 = new HashMap<>();
     private final File csvFile;
 
-    public APIStarRateDataAccessObject(String csvPath) throws FileNotFoundException {
+    public TempFileStarRateDAO(String csvPath) throws FileNotFoundException {
         csvFile = new File(csvPath);
         headers.put("restaurantId", 0);
         headers.put("reviewsData", 1);
@@ -56,12 +56,7 @@ public class APIStarRateDataAccessObject implements StarRateDataAccessInterface{
 
     @Override
     public Restaurant getRestaurantById(String id) throws RestaurantSearchService.RestaurantSearchException {
-        Restaurant rest = apiCall.getRestaurantDetails(id);
-        if (restaurants.get(id) != null){
-            List<Integer> reviews = restaurants.get(id);
-            rest.setRatingsList(reviews);
-        }
-        return rest;
+        return restaurants2.get(id);
     }
 
     @Override
@@ -77,7 +72,11 @@ public class APIStarRateDataAccessObject implements StarRateDataAccessInterface{
     // Saves to local device.
     @Override
     public void save(String id, Restaurant rest) {
+        if (rest.getRatingsList().isEmpty()){
+            rest.setRatingsList(restaurants.get(id));
+        }
         restaurants.put(id, rest.getRatingsList());
+        restaurants2.put(id, rest);
         save();
     }
     public void save(){

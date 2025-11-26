@@ -20,10 +20,8 @@ public class LoginPresenter implements LoginOutputBoundary{
 
     @Override
     public void prepareSuccessView(LoginOutputData output) {
-        // Switch to the Blank View
-        this.viewModel.setState(blankModel.getViewName());
+        this.viewModel.setState("menu");
         this.viewModel.firePropertyChange();
-
     }
 
     @Override

@@ -10,13 +10,14 @@ public class Main {
         JFrame application = appBuilder
                 .addBlankView()
                 .addLoginView()
+                .addSignupView()
                 .addMenuView()
                 .addLoginUseCase()
+                .addSignupUseCase()
                 .addStarRateUseCase()
                 .build();
         application.pack();
         application.setLocationRelativeTo(null);
         application.setVisible(true);
     }
-
 }

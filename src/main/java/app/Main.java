@@ -11,7 +11,9 @@ public class Main {
                 .addBlankView()
                 .addLoginView()
                 .addMenuView()
+                .addSignupView()
                 .addLoginUseCase()
+                .addSignupUseCase()
                 .addStarRateUseCase()
                 .build();
         application.pack();

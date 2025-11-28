@@ -14,7 +14,7 @@ import interface_adaptor.Login.LoginState;
 import interface_adaptor.Login.LoginViewModel;
 
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener{
-    private final String viewName = "log in";
+    private final String viewName = "Login";
     private final LoginViewModel loginViewModel;
 
     private final JTextField usernameInputField = new JTextField(15);

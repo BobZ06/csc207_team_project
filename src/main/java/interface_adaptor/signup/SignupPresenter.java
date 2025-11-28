@@ -1,46 +1,29 @@
-package interface_adaptor.signup;
+package interface_adaptor.Signup;
 
-import interface_adaptor.Login.LoginState;
-import interface_adaptor.Login.LoginViewModel;
 import interface_adaptor.ViewManagerModel;
-import signup.SignupOutputBoundary;
-import signup.SignupOutputData;
+import sign_up.SignupOutputBoundary;
+import sign_up.SignupOutputData;
 
 public class SignupPresenter implements SignupOutputBoundary {
-    private final SignupViewModel signupViewModel;
-    private final LoginViewModel loginViewModel;
+
+    private final SignupViewModel signupVM;
     private final ViewManagerModel viewManagerModel;
 
-    public SignupPresenter(ViewManagerModel viewManagerModel,
-                           SignupViewModel signupViewModel,
-                           LoginViewModel loginViewModel) {
+    public SignupPresenter(SignupViewModel signupVM, ViewManagerModel viewManagerModel) {
+        this.signupVM = signupVM;
         this.viewManagerModel = viewManagerModel;
-        this.signupViewModel = signupViewModel;
-        this.loginViewModel = loginViewModel;
     }
 
     @Override
-    public void prepareSuccessView(SignupOutputData response) {
-        // On success, switch to the login view.
-        final LoginState loginState = loginViewModel.getState();
-        // loginState.setUsername(response.getUsername());
-        loginViewModel.firePropertyChange();
-
-        this.viewManagerModel.setState(loginViewModel.getViewName());
-        this.viewManagerModel.firePropertyChange();
+    public void prepareSuccessView(SignupOutputData outputData) {
+        viewManagerModel.setState("log in");
+        viewManagerModel.firePropertyChange();
     }
 
     @Override
     public void prepareFailView(String error) {
-        final SignupState signupState = signupViewModel.getState();
-        signupState.setUsernameError(error);
-        signupViewModel.firePropertyChange();
+        SignupState state = signupVM.getState();
+        state.setMessage(error);
+        signupVM.firePropertyChange();
     }
-
-    @Override
-    public void switchToLoginView() {
-        viewManagerModel.setState(loginViewModel.getViewName());
-        viewManagerModel.firePropertyChange();
-    }
-
 }

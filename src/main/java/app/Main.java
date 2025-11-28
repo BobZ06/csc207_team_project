@@ -10,6 +10,7 @@ public class Main {
         JFrame application = appBuilder
                 .addBlankView()
                 .addLoginView()
+                .addSignupView()
                 .addMenuView()
                 .addSignupView()
                 .addLoginUseCase()
@@ -20,5 +21,4 @@ public class Main {
         application.setLocationRelativeTo(null);
         application.setVisible(true);
     }
-
 }

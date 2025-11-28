@@ -12,6 +12,7 @@ public class Main {
                 .addLoginView()
                 .addSignupView()
                 .addMenuView()
+                .addSignupView()
                 .addLoginUseCase()
                 .addSignupUseCase()
                 .addStarRateUseCase()

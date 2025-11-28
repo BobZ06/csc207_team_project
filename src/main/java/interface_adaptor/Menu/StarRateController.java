@@ -1,6 +1,7 @@
 package interface_adaptor.Menu;
 
 import data_access.RestaurantSearchService;
+import entity.User;
 import star_rate.StarRateInputBoundary;
 import star_rate.StarRateInputData;
 

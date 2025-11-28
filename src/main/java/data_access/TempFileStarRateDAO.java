@@ -72,9 +72,13 @@ public class TempFileStarRateDAO implements StarRateDataAccessInterface{
     // Saves to local device.
     @Override
     public void save(String id, Restaurant rest) {
-        if (rest.getRatingsList().isEmpty()){
-            rest.setRatingsList(restaurants.get(id));
+        if (rest.getRatingsList().isEmpty()) {
+            List<Integer> loaded = restaurants.get(id);
+            if (loaded != null) {
+                rest.setRatingsList(loaded);
+            }
         }
+
         restaurants.put(id, rest.getRatingsList());
         restaurants2.put(id, rest);
         save();

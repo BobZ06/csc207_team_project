@@ -125,6 +125,17 @@ class RestaurantTest {
     }
 
     @Test
+    void testSetRatingsList() {
+        List<Integer> newRatings = new ArrayList<>();
+        newRatings.add(4);
+        newRatings.add(5);
+        restaurant.setRatingsList(newRatings);
+
+        assertEquals(2, restaurant.getRatingsList().size());
+        assertEquals(4.5f, restaurant.getAverageRating(), 0.01);
+    }
+
+    @Test
     void testInvalidRatings() {
         // Test Boundary: 1 <= rating <= 5
         restaurant.addToRating(0); // Invalid

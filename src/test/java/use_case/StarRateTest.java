@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class starRate {
+public class StarRateTest {
     @Test
     void successTest() throws RestaurantSearchService.RestaurantSearchException {
         StarRateInputData inputData = new StarRateInputData(5, "1042");
@@ -41,7 +41,7 @@ public class starRate {
 
             @Override
             public void prepareSuccessView(StarRateOutputData outputData) {
-                assertEquals(5f, rest.getAverageRating());
+                assertEquals(5f, outputData.getAverage());
             }
             @Override
             public void prepareFailView(String errorMessage) {fail("Unexpected output");}

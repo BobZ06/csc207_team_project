@@ -24,6 +24,12 @@ public class User {
     public float[] getCoords(){
         return this.coords;
     }
+
+    public void setCoords(float coord1, float coord2){
+        this.coords[0] = coord1;
+        this.coords[1] = coord2;
+    }
+
     public void addToReviewed(String id){
         this.reviewedRests.add(id);
     }

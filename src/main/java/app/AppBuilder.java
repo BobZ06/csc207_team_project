@@ -9,30 +9,36 @@ import interface_adaptor.Menu.MenuViewModel;
 import interface_adaptor.Menu.StarRateController;
 import interface_adaptor.Menu.StarRatePresenter;
 import interface_adaptor.ViewManagerModel;
-import log_in.LoginInputBoundary;
-import log_in.LoginInteractor;
-import log_in.LoginOutputBoundary;
-import star_rate.StarRateInputBoundary;
-import star_rate.StarRateInteractor;
-import star_rate.StarRateOutputBoundary;
-import view.BlankView;
-import view.LoginView;
-import view.MenuView;
-import view.ViewManager;
+import interface_adaptor.Signup.SignupController;
+import interface_adaptor.Signup.SignupPresenter;
+import interface_adaptor.Signup.SignupViewModel;
+import use_case.log_in.LoginInputBoundary;
+import use_case.log_in.LoginInteractor;
+import use_case.log_in.LoginOutputBoundary;
+import use_case.signup.SignupInputBoundary;
+import use_case.signup.SignupInteractor;
+import use_case.signup.SignupOutputBoundary;
+import use_case.star_rate.StarRateDataAccessInterface;
+import use_case.star_rate.StarRateInputBoundary;
+import use_case.star_rate.StarRateInteractor;
+import use_case.star_rate.StarRateOutputBoundary;
+import view.*;
 import entity.MenuItem;
 import interface_adaptor.Menu.MenuState;
 import interface_adaptor.Menu.MenuSearchController;
 import interface_adaptor.Menu.MenuSearchPresenter;
-import menu_search.MenuSearchInputBoundary;
-import menu_search.MenuSearchInteractor;
-import menu_search.MenuSearchOutputBoundary;
+import use_case.menu_search.MenuSearchInputBoundary;
+import use_case.menu_search.MenuSearchInteractor;
+import use_case.menu_search.MenuSearchOutputBoundary;
 
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
 import entity.Restaurant;
+import entity.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AppBuilder {
@@ -46,7 +52,7 @@ public class AppBuilder {
     final TempUserDataAccessObject userDataAccessObject = new TempUserDataAccessObject();
 
     // Data Access Object Temp Star Rate:
-    final TempStarRateDataAccessObject starRateDataAccessObject = new TempStarRateDataAccessObject();
+    final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
 
     // Data Access Object Temp Menu:
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
@@ -54,11 +60,13 @@ public class AppBuilder {
     private BlankView blankView;
     private LoginView loginView;
     private MenuView menuView;
+    private SignupView signupView;
     private BlankViewModel blankViewModel;
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
+    private SignupViewModel signupViewModel;
 
-    public AppBuilder() {
+    public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
     }
 
@@ -70,6 +78,7 @@ public class AppBuilder {
     }
     public AppBuilder addLoginView(){
         loginViewModel = new LoginViewModel();
+        loginViewModel.setViewManagerModel(viewManagerModel);
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
@@ -79,6 +88,12 @@ public class AppBuilder {
         menuViewModel = new MenuViewModel();
         menuView = new MenuView(menuViewModel);
         cardPanel.add(menuView, menuView.getViewName());
+        return this;
+    }
+    public AppBuilder addSignupView(){
+        signupViewModel = new SignupViewModel();
+        signupView = new SignupView(signupViewModel);
+        cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
 
@@ -92,11 +107,21 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addSignupUseCase(){
+        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
+                signupViewModel, viewManagerModel, loginViewModel);
+        final SignupInputBoundary signupInteractor = new SignupInteractor(
+                userDataAccessObject, signupOutputBoundary);
+        SignupController signupController = new SignupController(signupInteractor);
+        signupView.setSignupController(signupController);
+        return this;
+    }
+
     public AppBuilder addStarRateUseCase() throws RestaurantSearchService.RestaurantSearchException {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(
                 viewManagerModel, menuViewModel);
         final StarRateInputBoundary starRateInteractor = new StarRateInteractor(
-                starRateOutputBoundary, starRateDataAccessObject);
+                starRateOutputBoundary, starRateDataAccessObject, userDataAccessObject);
         StarRateController starRateController = new StarRateController(starRateInteractor);
         menuView.setStarRateController(starRateController);
 
@@ -108,14 +133,20 @@ public class AppBuilder {
         rest.setName("Burger King");
         rest.setAddress("220 Yonge Street");
 
-        starRateDataAccessObject.addRestaurant(rest.getId(), rest);
+        User user = new User("Username", "Password");
+
+        starRateDataAccessObject.save(rest.getId(), rest);
         starRateDataAccessObject.setCurrentRestaurantId(rest.getId());
+        userDataAccessObject.save(user);
+        userDataAccessObject.setCurrentUsername(user.getName());
 
         MenuState menuState = menuViewModel.getState();
         menuState.setName(rest.getName());
         menuState.setRestaurant(rest.getId());
         menuState.setAddress(rest.getAddress());
         menuState.setRating(rest.getAverageRating());
+        menuState.setUsername(user.getName());
+        menuViewModel.firePropertyChange();
 
         // TEMP MENU
         menuDataAccessObject.addMenuItem(rest.getId(),
@@ -157,7 +188,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(menuView.getViewName());
+        viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChange();
 
         return application;

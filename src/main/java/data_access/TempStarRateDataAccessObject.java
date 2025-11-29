@@ -3,7 +3,7 @@ package data_access;
 import java.util.HashMap;
 import java.util.Map;
 import entity.Restaurant;
-import star_rate.StarRateDataAccessInterface;
+import use_case.star_rate.StarRateDataAccessInterface;
 
 public class TempStarRateDataAccessObject implements StarRateDataAccessInterface {
     private String currentRestaurantId;
@@ -25,7 +25,7 @@ public class TempStarRateDataAccessObject implements StarRateDataAccessInterface
     }
 
     @Override
-    public void addRestaurant(String id, Restaurant rest) {
+    public void save(String id, Restaurant rest) {
         restaurants.put(id, rest);
     }
 }

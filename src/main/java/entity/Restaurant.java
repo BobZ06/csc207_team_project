@@ -115,6 +115,8 @@ public class Restaurant {
         return new ArrayList<>(ratingsList); // Return copy for safety
     }
 
+    public void setRatingsList(List<Integer> list){this.ratingsList = list;}
+
     public float getPriceRange() {
         return priceRange;
     }

@@ -1,7 +1,7 @@
 package interface_adaptor.Menu;
 
-import menu_search.MenuSearchOutputBoundary;
-import menu_search.MenuSearchOutputData;
+import use_case.menu_search.MenuSearchOutputBoundary;
+import use_case.menu_search.MenuSearchOutputData;
 import entity.MenuItem;
 import java.util.ArrayList;
 

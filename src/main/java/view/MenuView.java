@@ -23,6 +23,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private StarRateController starRateController = null;
     private final JButton rate;
     private final JRadioButton star1, star2, star3, star4, star5;
+    private final JLabel reviewErrorField = new JLabel();
 
     // Restaurant Information UI Items
     private final JLabel restaurantName;
@@ -35,6 +36,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private final JTextField searchField = new JTextField(15);
     private final JButton searchButton = new JButton("Search");
 
+    // User information
+    private final JLabel username = new JLabel("Signed in as: ");
 
     public MenuView(MenuViewModel menuViewModel){
         this.menuViewModel = menuViewModel;
@@ -83,9 +86,6 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
                         final MenuState currentState = menuViewModel.getState();
 
-                        // Important to remove this!!!
-
-
                         try {
                             starRateController.execute(userInputRating, currentState.getRestaurantId());
                         } catch (RestaurantSearchService.RestaurantSearchException e) {
@@ -120,13 +120,14 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
+        this.add(username);
         this.add(restaurantInfo);
         this.add(searchPanel);
         this.add(scrollPane);
         this.add(buttons);
         this.add(averageRatingField);
         this.add(rate);
-
+        this.add(reviewErrorField);
     }
 
     @Override
@@ -144,6 +145,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         averageRatingField.setText("Average Rating: "+String.valueOf(state.getRating()));
         restaurantName.setText(state.getName());
         address.setText(state.getAddress());
+        username.setText("Signed in as: "+state.getUsername());
+        reviewErrorField.setText(state.getReviewError());
 
         java.util.ArrayList<entity.MenuItem> menu = state.getMenuList();
         DefaultListModel<String> listModel = new DefaultListModel<>();

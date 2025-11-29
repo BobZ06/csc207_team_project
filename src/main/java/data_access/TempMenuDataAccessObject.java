@@ -1,7 +1,7 @@
 package data_access;
 
 import entity.MenuItem;
-import menu_search.MenuSearchDataAccessInterface;
+import use_case.menu_search.MenuSearchDataAccessInterface;
 import java.util.*;
 
 public class TempMenuDataAccessObject implements MenuSearchDataAccessInterface {

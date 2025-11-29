@@ -1,5 +1,4 @@
 package entity;
-import data_access.LocationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +17,9 @@ public class User {
         this.reviewedRests = new ArrayList<String>();
     }
 
-    public void setCoordsFromLocation(GetUserLocation locationGetter)
-            throws LocationService.LocationNotFoundException {
-
-        List<Float> list = locationGetter.getLocation();
-        this.coords[0] = list.get(0);   // latitude
-        this.coords[1] = list.get(1);   // longitude
+    public void setCoords(float lat, float lng) {
+        this.coords[0] = lat;
+        this.coords[1] = lng;
     }
 
     public String getName(){

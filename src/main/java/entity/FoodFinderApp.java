@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import data_access.RestaurantSearchService;
-import data_access.YelpRestaurantSearchService;
 
 
 public class FoodFinderApp {
@@ -25,11 +23,8 @@ public class FoodFinderApp {
         this.currentUser = currentUser;
     }
 
-    public void createRestaurantList() throws RestaurantSearchService.RestaurantSearchException {
-        YelpRestaurantSearchService searchService = new YelpRestaurantSearchService();
-        float userX = currentUser.getCoords()[0];
-        float userY = currentUser.getCoords()[1];
-        this.restaurantList = searchService.searchRestaurants(userX, userY, "restaurant", 20);
+    public void setRestaurantList(List<Restaurant> restaurantList) {
+        this.restaurantList = restaurantList;
     }
 
     public List<Restaurant> getFullRestaurantlist() {

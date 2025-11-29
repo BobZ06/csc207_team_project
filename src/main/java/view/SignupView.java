@@ -1,7 +1,7 @@
 package view;
-import interface_adaptor.signup.SignupController;
-import interface_adaptor.signup.SignupState;
-import interface_adaptor.signup.SignupViewModel;
+import interface_adaptor.Signup.SignupController;
+import interface_adaptor.Signup.SignupState;
+import interface_adaptor.Signup.SignupViewModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -30,6 +30,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         final JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
 
         final LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.USERNAME_LABEL), usernameInputField);

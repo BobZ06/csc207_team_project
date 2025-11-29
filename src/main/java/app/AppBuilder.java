@@ -9,9 +9,9 @@ import interface_adaptor.Menu.MenuViewModel;
 import interface_adaptor.Menu.StarRateController;
 import interface_adaptor.Menu.StarRatePresenter;
 import interface_adaptor.ViewManagerModel;
-import interface_adaptor.signup.SignupController;
-import interface_adaptor.signup.SignupPresenter;
-import interface_adaptor.signup.SignupViewModel;
+import interface_adaptor.Signup.SignupController;
+import interface_adaptor.Signup.SignupPresenter;
+import interface_adaptor.Signup.SignupViewModel;
 import log_in.LoginInputBoundary;
 import log_in.LoginInteractor;
 import log_in.LoginOutputBoundary;
@@ -78,6 +78,7 @@ public class AppBuilder {
     }
     public AppBuilder addLoginView(){
         loginViewModel = new LoginViewModel();
+        loginViewModel.setViewManagerModel(viewManagerModel);
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
@@ -108,7 +109,7 @@ public class AppBuilder {
 
     public AppBuilder addSignupUseCase(){
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
-                viewManagerModel, signupViewModel, loginViewModel);
+                signupViewModel, viewManagerModel, loginViewModel);
         final SignupInputBoundary signupInteractor = new SignupInteractor(
                 userDataAccessObject, signupOutputBoundary);
         SignupController signupController = new SignupController(signupInteractor);

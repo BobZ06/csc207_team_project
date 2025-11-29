@@ -1,103 +1,77 @@
 package interface_adaptor.Menu;
 
-import entity.MenuItem;
-import org.json.JSONObject;
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import java.util.ArrayList;
+import interface_adaptor.Menu.ViewMenuController;
 
-/**
- * State for the Menu view.
- * Pure data: no Swing components, no controllers.
- */
-public class MenuState {
+public class MenuView extends JPanel implements PropertyChangeListener {
 
-    private String name = "";
-    private String restaurantId;
-    private float rating = 0;
-    private String address = "";
-    private ArrayList<MenuItem> menuList;
-    private String reviewError;
-    private String username = "";
 
-    // API menu data (JSON from MenuService)
-    private JSONObject menuData;
+    private final String viewName = "MenuView";
+    private final MenuViewModel viewModel;
 
-    // Error message for menu API
-    private String menuError;
+    private final JLabel restaurantName = new JLabel();
+    private final JLabel address = new JLabel();
+    private final JLabel rating = new JLabel();
+    private final JLabel username = new JLabel();
 
-    // ---- GETTERS ----
+    private final JList<String> menuList = new JList<>();
+    private final JScrollPane scrollPane = new JScrollPane(menuList);
 
-    public String getName() {
-        return this.name;
+    private StarRateController starRateController;
+    private MenuSearchController searchController;
+    private ViewMenuController viewMenuController;
+
+    public MenuView(MenuViewModel viewModel) {
+        this.viewModel = viewModel;
+        this.viewModel.addPropertyChangeListener(this);
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        add(restaurantName);
+        add(address);
+        add(rating);
+        add(username);
+        add(scrollPane);
     }
 
-    public String getRestaurantId() {
-        return this.restaurantId;
+    public String getViewName() {
+        return viewName;
     }
 
-    public float getRating() {
-        return this.rating;
+    public void setStarRateController(StarRateController controller) {
+        this.starRateController = controller;
     }
 
-    public String getAddress() {
-        return this.address;
+    public void setMenuSearchController(MenuSearchController controller) {
+        this.searchController = controller;
     }
 
-    public ArrayList<MenuItem> getMenuList() {
-        return this.menuList;
+    public void setViewMenuController(ViewMenuController controller) {
+        this.viewMenuController = controller;
     }
 
-    public String getReviewError() {
-        return this.reviewError;
-    }
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        var state = viewModel.getState();
 
-    public String getUsername() {
-        return this.username;
-    }
+        restaurantName.setText("Restaurant: " + state.getName());
+        address.setText("Address: " + state.getAddress());
+        rating.setText("Rating: " + state.getRating());
+        username.setText("User: " + state.getUsername());
 
-    public JSONObject getMenuData() {
-        return menuData;
-    }
+        var menu = state.getMenuList();
+        DefaultListModel<String> items = new DefaultListModel<>();
 
-    public String getMenuError() {
-        return menuError;
-    }
+        if (menu != null) {
+            menu.forEach(item ->
+                    items.addElement(item.getName() + " $" + item.getPrice())
+            );
+        }
 
-    // ---- SETTERS ----
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setRestaurant(String rest) {
-        this.restaurantId = rest;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setMenuList(ArrayList<MenuItem> menuList) {
-        this.menuList = menuList;
-    }
-
-    public void setReviewError(String error) {
-        this.reviewError = error;
-    }
-
-    public void setUsername(String name) {
-        this.username = name;
-    }
-
-    public void setMenuData(JSONObject menuData) {
-        this.menuData = menuData;
-    }
-
-    public void setMenuError(String menuError) {
-        this.menuError = menuError;
+        menuList.setModel(items);
     }
 }

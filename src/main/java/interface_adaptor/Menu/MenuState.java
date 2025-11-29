@@ -1,10 +1,13 @@
 package interface_adaptor.Menu;
 
 import entity.MenuItem;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
 public class MenuState {
+
     private String name = "";
     private String restaurantId;
     private float rating = 0;
@@ -13,43 +16,85 @@ public class MenuState {
     private String reviewError;
     private String username = "";
 
-    public String getName(){
+    // API menu data (JSON from MenuService)
+    private JSONObject menuData;
+
+    // Error message for menu API
+    private String menuError;
+
+    // ---- GETTERS ----
+
+    public String getName() {
         return this.name;
     }
-    public String getRestaurantId(){
+
+    public String getRestaurantId() {
         return this.restaurantId;
     }
-    public float getRating(){
+
+    public float getRating() {
         return this.rating;
     }
-    public String getAddress(){
+
+    public String getAddress() {
         return this.address;
     }
-    public ArrayList<MenuItem> getMenuList(){
+
+    public ArrayList<MenuItem> getMenuList() {
         return this.menuList;
     }
-    public String getReviewError(){return this.reviewError;}
-    public String getUsername(){
+
+    public String getReviewError() {
+        return this.reviewError;
+    }
+
+    public String getUsername() {
         return this.username;
     }
 
-    public void setName(String name){
+    public JSONObject getMenuData() {
+        return menuData;
+    }
+
+    public String getMenuError() {
+        return menuError;
+    }
+
+    // ---- SETTERS ----
+
+    public void setName(String name) {
         this.name = name;
     }
-    public void setRestaurant(String rest){
+
+    public void setRestaurant(String rest) {
         this.restaurantId = rest;
     }
+
     public void setRating(float rating) {
         this.rating = rating;
     }
-    public void setAddress(String address){
+
+    public void setAddress(String address) {
         this.address = address;
     }
-    public void setMenuList(ArrayList<MenuItem> menuList){
+
+    public void setMenuList(ArrayList<MenuItem> menuList) {
         this.menuList = menuList;
     }
-    public void setReviewError(String error){this.reviewError = error;}
-    public void setUsername(String name){
+
+    public void setReviewError(String error) {
+        this.reviewError = error;
+    }
+
+    public void setUsername(String name) {
         this.username = name;
+    }
+
+    public void setMenuData(JSONObject menuData) {
+        this.menuData = menuData;
+    }
+
+    public void setMenuError(String menuError) {
+        this.menuError = menuError;
     }
 }

@@ -1,13 +1,12 @@
 package app;
+
 import data_access.*;
 
 import interface_adaptor.BlankViewModel;
 import interface_adaptor.Login.LoginController;
 import interface_adaptor.Login.LoginPresenter;
 import interface_adaptor.Login.LoginViewModel;
-import interface_adaptor.Menu.MenuViewModel;
-import interface_adaptor.Menu.StarRateController;
-import interface_adaptor.Menu.StarRatePresenter;
+import interface_adaptor.Menu.*;
 import interface_adaptor.ViewManagerModel;
 import interface_adaptor.signup.SignupController;
 import interface_adaptor.signup.SignupPresenter;
@@ -24,12 +23,17 @@ import star_rate.StarRateInteractor;
 import star_rate.StarRateOutputBoundary;
 import view.*;
 import entity.MenuItem;
-import interface_adaptor.Menu.MenuState;
-import interface_adaptor.Menu.MenuSearchController;
-import interface_adaptor.Menu.MenuSearchPresenter;
 import menu_search.MenuSearchInputBoundary;
 import menu_search.MenuSearchInteractor;
 import menu_search.MenuSearchOutputBoundary;
+
+import view_menu.ViewMenuInputBoundary;
+import view_menu.ViewMenuInteractor;
+import view_menu.ViewMenuOutputBoundary;
+
+import data_access.MenuService;
+import view_menu.ViewMenuDataAccessInterface;
+import data_access.MenuServiceForLocalTesting; // add api later
 
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
@@ -57,6 +61,9 @@ public class AppBuilder {
     // Data Access Object Temp Menu:
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
+    final MenuService menuService = new SpoonacularMenuService();
+
+    private BlankView blankView;
     private BlankView blankView;
     private LoginView loginView;
     private MenuView menuView;
@@ -70,33 +77,35 @@ public class AppBuilder {
         cardPanel.setLayout(cardLayout);
     }
 
-    public AppBuilder addBlankView(){
+    public AppBuilder addBlankView() {
         blankViewModel = new BlankViewModel();
         blankView = new BlankView();
         cardPanel.add(blankView, blankView.getViewName());
         return this;
     }
-    public AppBuilder addLoginView(){
+
+    public AppBuilder addLoginView() {
         loginViewModel = new LoginViewModel();
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
     }
 
-    public AppBuilder addMenuView(){
+    public AppBuilder addMenuView() {
         menuViewModel = new MenuViewModel();
         menuView = new MenuView(menuViewModel);
         cardPanel.add(menuView, menuView.getViewName());
         return this;
     }
-    public AppBuilder addSignupView(){
+
+    public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
         signupView = new SignupView(signupViewModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
 
-    public AppBuilder addLoginUseCase(){
+    public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(
                 blankViewModel, loginViewModel, viewManagerModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
@@ -106,7 +115,7 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder addSignupUseCase(){
+    public AppBuilder addSignupUseCase() {
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
                 viewManagerModel, signupViewModel, loginViewModel);
         final SignupInputBoundary signupInteractor = new SignupInteractor(
@@ -177,6 +186,29 @@ public class AppBuilder {
 
         // YelpRestaurantSearchService apiCall = new YelpRestaurantSearchService();
         // ArrayList restaurantList = (ArrayList) apiCall.searchRestaurants(40.7128f, -74.0060f, "Burger", 10);
+
+        return this;
+    }
+
+    public AppBuilder addViewMenuUseCase() {
+        // 1. Presenter
+        ViewMenuOutputBoundary presenter =
+                new ViewMenuPresenter(menuViewModel);
+
+        // 2. Data Access Object wrapping the MenuService
+        ViewMenuDataAccessInterface menuDAO =
+                new APIMenuDataAccessObject(menuService);
+
+        // 3. Interactor
+        ViewMenuInputBoundary interactor =
+                new ViewMenuInteractor(menuDAO, presenter);
+
+        // 4. Controller
+        ViewMenuController controller =
+                new ViewMenuController(interactor);
+
+        // 5. Connect controller to UI
+        menuView.setViewMenuController(controller);
 
         return this;
     }

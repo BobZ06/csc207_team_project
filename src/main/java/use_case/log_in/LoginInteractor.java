@@ -30,13 +30,13 @@ public class LoginInteractor implements LoginInputBoundary{
             }
             // The password is wrong. Prepare fail view.
             else{
-                outputBoundary.prepareFailView("The Username or Password is incorrect.");
+                outputBoundary.prepareFailView("The Username or password is incorrect.");
             }
         }
 
         // The username is not in the data: Prepare fail view.
         else{
-            outputBoundary.prepareFailView("The Username or Password is incorrect.");
+            outputBoundary.prepareFailView("The username or Password is incorrect.");
         }
     }
 }

@@ -5,13 +5,13 @@ Food Finder is a desktop application designed to help users find dining options.
 
 ## Team Members & User Stories
 
-| Team Member | Feature / User Story | Status      |
-| :--- | :--- |:------------|
-| **Ruhan Kiani** | **Search Restaurants by Location** (User Story #1)<br>Find dining options near a specific address using Google Maps & Yelp. | In Progress |
-| **Vignesh Khajuria** | **View Restaurant Menu** (User Story #2)<br>View detailed menu items and prices (via Spoonacular). | In Progress |
-| **Mertali Muhsin Tercan** | **Search Menu Items** (User Story #3)<br>Search for specific food (e.g., "burger") within a menu. | In Progress |
+| Team Member | Feature / User Story | Status                    |
+| :--- | :--- |:--------------------------|
+| **Ruhan Kiani** | **Search Restaurants by Location** (User Story #1)<br>Find dining options near a specific address using Google Maps & Yelp. | In Progress               |
+| **Vignesh Khajuria** | **View Restaurant Menu** (User Story #2)<br>View detailed menu items and prices (via Spoonacular). | In Progress               |
+| **Mertali Muhsin Tercan** | **Search Menu Items** (User Story #3)<br>Search for specific food (e.g., "burger") within a menu. | In Progress               |
 | **Bowen Zhao** | **View Yelp Reviews** (User Story #4)<br>Retrieve and display reviews/ratings from Yelp API. | Done (100% Test Coverage) |
-| **Arthur Jiang** | **Rate a Restaurant** (User Story #5)<br>Allow users to rate a restaurant (1-5 stars) and save to local DB. | Done |
+| **Arthur Jiang** | **Rate a Restaurant** (User Story #5)<br>Allow users to rate a restaurant (1-5 stars) and save to local DB. | Done (100% Test Coverage) |
 
 > **Note:** We also have **Login/Signup** implemented to support User Story #5.
 
@@ -39,9 +39,9 @@ To run the application, you must configure your API keys locally:
 
 ### 2. Use Case Layer Tests
 - [x] **View Ratings:** `ViewRatingsInteractorTest.java` is complete (100% coverage).
-- [ ] **Star Rate:** `starRate.java` exists, needs check for 100% coverage.
-- [ ] **Login:** Need `LoginInteractorTest.java`.
-- [ ] **Signup:** Need `SignupInteractorTest.java`.
+- [x] **Star Rate:** `starRateTest.java` is complete (100% coverage).
+- [x] **Login:** `LoginTest.java` is complete (100% coverage).
+- [x] **Signup:** `SignupTest.java` is complete (100% coverage).
 - [ ] **Menu Search:** Need `MenuSearchInteractorTest.java`.
 
 ### 3. How to Check Coverage

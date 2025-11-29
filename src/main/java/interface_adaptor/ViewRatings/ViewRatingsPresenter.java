@@ -1,7 +1,7 @@
 package interface_adaptor.ViewRatings;
 
-import view_ratings.ViewRatingsOutputBoundary;
-import view_ratings.ViewRatingsOutputData;
+import use_case.view_ratings.ViewRatingsOutputBoundary;
+import use_case.view_ratings.ViewRatingsOutputData;
 
 public class ViewRatingsPresenter implements ViewRatingsOutputBoundary {
     private final ViewRatingsViewModel viewModel;

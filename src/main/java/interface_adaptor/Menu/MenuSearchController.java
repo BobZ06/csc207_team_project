@@ -1,7 +1,7 @@
 package interface_adaptor.Menu;
 
-import menu_search.MenuSearchInputBoundary;
-import menu_search.MenuSearchInputData;
+import use_case.menu_search.MenuSearchInputBoundary;
+import use_case.menu_search.MenuSearchInputData;
 
 public class MenuSearchController {
     private final MenuSearchInputBoundary inputBoundary;

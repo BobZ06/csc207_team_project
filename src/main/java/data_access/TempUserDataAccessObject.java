@@ -1,7 +1,7 @@
 package data_access;
 import entity.User;
-import log_in.LoginDataAccessInterface;
-import signup.SignupDataAccessInterface;
+import use_case.log_in.LoginDataAccessInterface;
+import use_case.signup.SignupDataAccessInterface;
 
 import java.util.HashMap;
 import java.util.Map;

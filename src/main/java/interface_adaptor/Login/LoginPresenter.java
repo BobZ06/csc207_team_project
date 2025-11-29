@@ -1,10 +1,9 @@
 package interface_adaptor.Login;
 
 import interface_adaptor.ViewManagerModel;
-import interface_adaptor.BlackState;
 import interface_adaptor.BlankViewModel;
-import log_in.LoginOutputBoundary;
-import log_in.LoginOutputData;
+import use_case.log_in.LoginOutputBoundary;
+import use_case.log_in.LoginOutputData;
 
 public class LoginPresenter implements LoginOutputBoundary{
     private final BlankViewModel blankModel;

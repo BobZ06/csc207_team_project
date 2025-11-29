@@ -1,7 +1,7 @@
 package interface_adaptor.ViewRatings;
 
-import view_ratings.ViewRatingsInputBoundary;
-import view_ratings.ViewRatingsInputData;
+import use_case.view_ratings.ViewRatingsInputBoundary;
+import use_case.view_ratings.ViewRatingsInputData;
 
 public class ViewRatingsController {
     final ViewRatingsInputBoundary interactor;

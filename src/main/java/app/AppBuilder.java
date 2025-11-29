@@ -12,24 +12,24 @@ import interface_adaptor.ViewManagerModel;
 import interface_adaptor.Signup.SignupController;
 import interface_adaptor.Signup.SignupPresenter;
 import interface_adaptor.Signup.SignupViewModel;
-import log_in.LoginInputBoundary;
-import log_in.LoginInteractor;
-import log_in.LoginOutputBoundary;
-import signup.SignupInputBoundary;
-import signup.SignupInteractor;
-import signup.SignupOutputBoundary;
-import star_rate.StarRateDataAccessInterface;
-import star_rate.StarRateInputBoundary;
-import star_rate.StarRateInteractor;
-import star_rate.StarRateOutputBoundary;
+import use_case.log_in.LoginInputBoundary;
+import use_case.log_in.LoginInteractor;
+import use_case.log_in.LoginOutputBoundary;
+import use_case.signup.SignupInputBoundary;
+import use_case.signup.SignupInteractor;
+import use_case.signup.SignupOutputBoundary;
+import use_case.star_rate.StarRateDataAccessInterface;
+import use_case.star_rate.StarRateInputBoundary;
+import use_case.star_rate.StarRateInteractor;
+import use_case.star_rate.StarRateOutputBoundary;
 import view.*;
 import entity.MenuItem;
 import interface_adaptor.Menu.MenuState;
 import interface_adaptor.Menu.MenuSearchController;
 import interface_adaptor.Menu.MenuSearchPresenter;
-import menu_search.MenuSearchInputBoundary;
-import menu_search.MenuSearchInteractor;
-import menu_search.MenuSearchOutputBoundary;
+import use_case.menu_search.MenuSearchInputBoundary;
+import use_case.menu_search.MenuSearchInteractor;
+import use_case.menu_search.MenuSearchOutputBoundary;
 
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!

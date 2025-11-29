@@ -1,7 +1,6 @@
 package data_access;
 import entity.Restaurant;
-import entity.User;
-import star_rate.StarRateDataAccessInterface;
+import use_case.star_rate.StarRateDataAccessInterface;
 
 import java.io.*;
 import java.util.HashMap;

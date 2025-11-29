@@ -3,7 +3,7 @@ package data_access;
 import java.util.HashMap;
 import java.util.Map;
 import entity.Restaurant;
-import star_rate.StarRateDataAccessInterface;
+import use_case.star_rate.StarRateDataAccessInterface;
 
 public class TempStarRateDataAccessObject implements StarRateDataAccessInterface {
     private String currentRestaurantId;

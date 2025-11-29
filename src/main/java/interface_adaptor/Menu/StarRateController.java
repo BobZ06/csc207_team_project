@@ -1,9 +1,8 @@
 package interface_adaptor.Menu;
 
 import data_access.RestaurantSearchService;
-import entity.User;
-import star_rate.StarRateInputBoundary;
-import star_rate.StarRateInputData;
+import use_case.star_rate.StarRateInputBoundary;
+import use_case.star_rate.StarRateInputData;
 
 public class StarRateController {
     private StarRateInputBoundary inputBoundary;

@@ -1,8 +1,8 @@
 package interface_adaptor.Menu;
 
 import interface_adaptor.ViewManagerModel;
-import star_rate.StarRateOutputBoundary;
-import star_rate.StarRateOutputData;
+import use_case.star_rate.StarRateOutputBoundary;
+import use_case.star_rate.StarRateOutputData;
 
 public class StarRatePresenter implements StarRateOutputBoundary {
     private final ViewManagerModel viewModel;

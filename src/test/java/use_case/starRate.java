@@ -5,9 +5,9 @@ import data_access.TempStarRateDataAccessObject;
 import data_access.TempUserDataAccessObject;
 import entity.Restaurant;
 import entity.User;
-import log_in.LoginDataAccessInterface;
+import use_case.log_in.LoginDataAccessInterface;
 import org.junit.jupiter.api.Test;
-import star_rate.*;
+import use_case.star_rate.*;
 
 import java.util.ArrayList;
 

@@ -9,22 +9,36 @@ import interface_adaptor.Menu.MenuViewModel;
 import interface_adaptor.Menu.StarRateController;
 import interface_adaptor.Menu.StarRatePresenter;
 import interface_adaptor.ViewManagerModel;
+import interface_adaptor.signup.SignupController;
+import interface_adaptor.signup.SignupPresenter;
+import interface_adaptor.signup.SignupViewModel;
 import log_in.LoginInputBoundary;
 import log_in.LoginInteractor;
 import log_in.LoginOutputBoundary;
+import signup.SignupInputBoundary;
+import signup.SignupInteractor;
+import signup.SignupOutputBoundary;
+import star_rate.StarRateDataAccessInterface;
 import star_rate.StarRateInputBoundary;
 import star_rate.StarRateInteractor;
 import star_rate.StarRateOutputBoundary;
-import view.BlankView;
-import view.LoginView;
-import view.MenuView;
-import view.ViewManager;
+import view.*;
+import entity.MenuItem;
+import interface_adaptor.Menu.MenuState;
+import interface_adaptor.Menu.MenuSearchController;
+import interface_adaptor.Menu.MenuSearchPresenter;
+import menu_search.MenuSearchInputBoundary;
+import menu_search.MenuSearchInteractor;
+import menu_search.MenuSearchOutputBoundary;
+
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
 import entity.Restaurant;
+import entity.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AppBuilder {
@@ -38,16 +52,21 @@ public class AppBuilder {
     final TempUserDataAccessObject userDataAccessObject = new TempUserDataAccessObject();
 
     // Data Access Object Temp Star Rate:
-    final TempStarRateDataAccessObject starRateDataAccessObject = new TempStarRateDataAccessObject();
+    final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
+
+    // Data Access Object Temp Menu:
+    final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
     private BlankView blankView;
     private LoginView loginView;
     private MenuView menuView;
+    private SignupView signupView;
     private BlankViewModel blankViewModel;
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
+    private SignupViewModel signupViewModel;
 
-    public AppBuilder() {
+    public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
     }
 
@@ -70,6 +89,12 @@ public class AppBuilder {
         cardPanel.add(menuView, menuView.getViewName());
         return this;
     }
+    public AppBuilder addSignupView(){
+        signupViewModel = new SignupViewModel();
+        signupView = new SignupView(signupViewModel);
+        cardPanel.add(signupView, signupView.getViewName());
+        return this;
+    }
 
     public AppBuilder addLoginUseCase(){
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(
@@ -81,23 +106,77 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addSignupUseCase(){
+        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
+                viewManagerModel, signupViewModel, loginViewModel);
+        final SignupInputBoundary signupInteractor = new SignupInteractor(
+                userDataAccessObject, signupOutputBoundary);
+        SignupController signupController = new SignupController(signupInteractor);
+        signupView.setSignupController(signupController);
+        return this;
+    }
+
     public AppBuilder addStarRateUseCase() throws RestaurantSearchService.RestaurantSearchException {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(
                 viewManagerModel, menuViewModel);
         final StarRateInputBoundary starRateInteractor = new StarRateInteractor(
-                starRateOutputBoundary, starRateDataAccessObject);
+                starRateOutputBoundary, starRateDataAccessObject, userDataAccessObject);
         StarRateController starRateController = new StarRateController(starRateInteractor);
         menuView.setStarRateController(starRateController);
 
-        // IMPORTANT REMOVE WHEN DONE!!!!
-        ArrayList coords = new ArrayList<Float>();
+        // ---- IMPORTANT REMOVE WHEN DONE (USE CASE 3 & 5 DEMO) ----
+        ArrayList<Float> coords = new ArrayList<>();
         coords.add(10f);
         coords.add(10f);
-        Restaurant rest = new Restaurant(10f, coords, "Burger", "1012301023102301023");
-        starRateDataAccessObject.addRestaurant(rest.getId(), rest);
+        Restaurant rest = new Restaurant(10f, coords, "Burger", "1042");
+        rest.setName("Burger King");
+        rest.setAddress("220 Yonge Street");
+
+        User user = new User("Username", "Password");
+
+        starRateDataAccessObject.save(rest.getId(), rest);
         starRateDataAccessObject.setCurrentRestaurantId(rest.getId());
-//        YelpRestaurantSearchService apiCall = new YelpRestaurantSearchService();
-//        ArrayList restaurantList = (ArrayList) apiCall.searchRestaurants(40.7128f, -74.0060f, "Burger", 10);
+        userDataAccessObject.save(user);
+        userDataAccessObject.setCurrentUsername(user.getName());
+
+        MenuState menuState = menuViewModel.getState();
+        menuState.setName(rest.getName());
+        menuState.setRestaurant(rest.getId());
+        menuState.setAddress(rest.getAddress());
+        menuState.setRating(rest.getAverageRating());
+        menuState.setUsername(user.getName());
+        menuViewModel.firePropertyChange();
+
+        // TEMP MENU
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Cheeseburger", 9.99f, "Beef burger with cheese"));
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Megaburger", 12.99f, "Double the meat, double the taste"));
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Salad", 8.99f, "With fresh greens and preferred sauce"));
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Fries", 3.99f, "Crispy french fries"));
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Diet Coke", 1.59f, "Ice-cold soft drink"));
+        menuDataAccessObject.addMenuItem(rest.getId(),
+                new MenuItem("Ketchup", 0.39f, "Good ol' ketchup"));
+
+        java.util.ArrayList<MenuItem> allItems =
+                new java.util.ArrayList<>(menuDataAccessObject.getMenu(rest.getId()));
+        menuState.setMenuList(allItems);
+        menuViewModel.firePropertyChange();
+
+        MenuSearchOutputBoundary menuSearchOutputBoundary =
+                new MenuSearchPresenter(menuViewModel);
+        MenuSearchInputBoundary menuSearchInteractor =
+                new MenuSearchInteractor(menuDataAccessObject, menuSearchOutputBoundary);
+        MenuSearchController menuSearchController =
+                new MenuSearchController(menuSearchInteractor);
+        menuView.setMenuSearchController(menuSearchController);
+
+
+        // YelpRestaurantSearchService apiCall = new YelpRestaurantSearchService();
+        // ArrayList restaurantList = (ArrayList) apiCall.searchRestaurants(40.7128f, -74.0060f, "Burger", 10);
 
         return this;
     }
@@ -108,7 +187,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(menuView.getViewName());
+        viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChange();
 
         return application;

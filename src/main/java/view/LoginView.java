@@ -14,7 +14,7 @@ import interface_adaptor.Login.LoginState;
 import interface_adaptor.Login.LoginViewModel;
 
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener{
-    private final String viewName = "log in";
+    private final String viewName = "Login";
     private final LoginViewModel loginViewModel;
 
     private final JTextField usernameInputField = new JTextField(15);
@@ -24,7 +24,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     private final JLabel passwordErrorField = new JLabel();
 
     private final JButton logIn;
-    private final JButton cancel;
+    private final JButton createAccount;
     private LoginController loginController = null;
 
     public LoginView(LoginViewModel loginViewModel) {
@@ -32,8 +32,12 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Login Screen");
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        final JLabel title = new JLabel("Welcome!");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
 
         final LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel("Username"), usernameInputField);
@@ -43,8 +47,19 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         final JPanel buttons = new JPanel();
         logIn = new JButton("log in");
         buttons.add(logIn);
-        cancel = new JButton("cancel");
-        buttons.add(cancel);
+        createAccount = new JButton("Create Account");
+        buttons.add(createAccount);
+
+        createAccount.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(createAccount)) {
+                            loginViewModel.getViewManagerModel().setState("signup");
+                            loginViewModel.getViewManagerModel().firePropertyChange();
+                        }
+                    }
+                }
+        );
 
         logIn.addActionListener(
                 new ActionListener() {
@@ -60,19 +75,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
-
-        cancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                if (evt.getSource().equals(cancel)) {
-                    final LoginState currentState = loginViewModel.getState();
-
-                    loginController.execute(
-                            currentState.getUsername(),
-                            currentState.getPassword()
-                    );
-                }
-            }
-        });
 
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -97,8 +99,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 documentListenerHelper();
             }
         });
-
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
 

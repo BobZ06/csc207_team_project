@@ -1,7 +1,6 @@
 package interface_adaptor.Menu;
 
 import entity.MenuItem;
-import entity.Restaurant;
 
 import java.util.ArrayList;
 
@@ -11,6 +10,8 @@ public class MenuState {
     private float rating = 0;
     private String address = "";
     private ArrayList<MenuItem> menuList;
+    private String reviewError;
+    private String username = "";
 
     public String getName(){
         return this.name;
@@ -27,6 +28,10 @@ public class MenuState {
     public ArrayList<MenuItem> getMenuList(){
         return this.menuList;
     }
+    public String getReviewError(){return this.reviewError;}
+    public String getUsername(){
+        return this.username;
+    }
 
     public void setName(String name){
         this.name = name;
@@ -42,5 +47,9 @@ public class MenuState {
     }
     public void setMenuList(ArrayList<MenuItem> menuList){
         this.menuList = menuList;
+    }
+    public void setReviewError(String error){this.reviewError = error;}
+    public void setUsername(String name){
+        this.username = name;
     }
 }

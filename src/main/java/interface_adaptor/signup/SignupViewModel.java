@@ -1,15 +1,15 @@
-package interface_adaptor.Login;
+package interface_adaptor.Signup;
 
 import interface_adaptor.ViewManagerModel;
 import interface_adaptor.ViewModel;
 
-public class LoginViewModel extends ViewModel<LoginState>{
+public class SignupViewModel extends ViewModel<SignupState> {
 
     private ViewManagerModel viewManagerModel;
 
-    public LoginViewModel(){
-        super("Login");
-        setState(new LoginState());
+    public SignupViewModel() {
+        super("signup");
+        setState(new SignupState());
     }
 
     public void setViewManagerModel(ViewManagerModel vmm) {

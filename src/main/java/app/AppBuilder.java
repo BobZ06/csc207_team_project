@@ -78,6 +78,7 @@ public class AppBuilder {
     }
     public AppBuilder addLoginView(){
         loginViewModel = new LoginViewModel();
+        loginViewModel.setViewManagerModel(viewManagerModel);
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
@@ -108,7 +109,7 @@ public class AppBuilder {
 
     public AppBuilder addSignupUseCase(){
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
-                viewManagerModel, signupViewModel, loginViewModel);
+                signupViewModel, viewManagerModel, loginViewModel);
         final SignupInputBoundary signupInteractor = new SignupInteractor(
                 userDataAccessObject, signupOutputBoundary);
         SignupController signupController = new SignupController(signupInteractor);

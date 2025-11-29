@@ -25,10 +25,11 @@ public class FoodFinderApp {
         this.currentUser = currentUser;
     }
 
-
     public void createRestaurantList() throws RestaurantSearchService.RestaurantSearchException {
         YelpRestaurantSearchService searchService = new YelpRestaurantSearchService();
-        this.restaurantList = searchService.searchRestaurants(41.902656f, -87.650020f, "restaurant", 10);
+        float userX = currentUser.getCoords()[0];
+        float userY = currentUser.getCoords()[1];
+        this.restaurantList = searchService.searchRestaurants(userX, userY, "restaurant", 20);
     }
 
     public List<Restaurant> getFullRestaurantlist() {

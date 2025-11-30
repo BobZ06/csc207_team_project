@@ -1,10 +1,13 @@
 package data_access;
 
+import entity.MenuItem;
+import org.json.JSONArray;
 import org.json.JSONObject;
-import use_case.view_menu.ViewMenuDataAccessInterface;
+import use_case.menu_search.MenuSearchDataAccessInterface;
+import java.util.ArrayList;
+import java.util.List;
 
-
-public class APIMenuDataAccessObject implements ViewMenuDataAccessInterface {
+public class APIMenuDataAccessObject implements MenuSearchDataAccessInterface {
 
     private final MenuService menuService;
 
@@ -13,9 +16,25 @@ public class APIMenuDataAccessObject implements ViewMenuDataAccessInterface {
     }
 
     @Override
-    public JSONObject getRestaurantMenu(String restaurantName, String zipCode) throws Exception {
-        // This calls whatever concrete MenuService implementation you pass in
-        // (e.g., SpoonacularMenuService, a local testing stub, etc.)
-        return menuService.getRestaurantMenu(restaurantName, zipCode);
+    public List<MenuItem> getMenu(String restaurantName) {
+        try {
+            JSONObject menuJson = menuService.getRestaurantMenu(restaurantName, "00000");
+            JSONArray arr = menuJson.getJSONArray("menuItems");
+
+            List<MenuItem> list = new ArrayList<>();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                list.add(new MenuItem(
+                        obj.getString("title"),
+                        (float) obj.getDouble("price"),
+                        obj.optString("readablePrice", "")
+                ));
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 }

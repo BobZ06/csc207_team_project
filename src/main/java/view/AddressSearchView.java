@@ -1,6 +1,7 @@
 package view;
 
 import interface_adaptor.log_out.LogoutController;
+import interface_adaptor.menu.ViewMenuController;
 import interface_adaptor.restaurant_search.RestaurantSearchController;
 import interface_adaptor.restaurant_search.RestaurantSearchState;
 import interface_adaptor.restaurant_search.RestaurantSearchViewModel;
@@ -18,6 +19,7 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
     private final RestaurantSearchViewModel viewModel;
     private RestaurantSearchController controller;
     private LogoutController logoutController;
+    private ViewMenuController viewMenuController;
 
     private final JTextField addressField = new JTextField(25);
     private final JButton searchButton = new JButton("Search");
@@ -40,7 +42,7 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
         add(title);
         add(Box.createVerticalStrut(5));
 
-        addressField.setMaximumSize(new Dimension(300, 28)); // tek satır, daha küçük
+        addressField.setMaximumSize(new Dimension(300, 28));
         addressField.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(addressField);
         add(Box.createVerticalStrut(10));
@@ -62,17 +64,44 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
         logoutButton.addActionListener(e ->
                 logoutController.execute());
 
-        menuButton.addActionListener(e -> System.out.println("Menu button clicked (attach logic)"));
+        menuButton.addActionListener(e -> {
+            int selectedIndex = resultsList.getSelectedIndex();
+            if (selectedIndex == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a restaurant first.");
+                return;
+            }
+
+            List<Restaurant> restaurants = viewModel.getState().getResults();
+            if (restaurants != null && selectedIndex < restaurants.size()) {
+                Restaurant selected = restaurants.get(selectedIndex);
+
+                if (viewMenuController != null) {
+                    viewMenuController.viewMenu(
+                            selected.getName(),
+                            selected.getZipCode(),
+                            selected.getAddress(),
+                            selected.getAverageRating()
+                    );
+                }
+            }
+        });
     }
 
     public void setController(RestaurantSearchController c) {
         this.controller = c;
     }
+
     public void setLogoutController(LogoutController c) {
         this.logoutController = c;
     }
 
-    public String getViewName() { return "SearchView"; }
+    public void setViewMenuController(ViewMenuController c) {
+        this.viewMenuController = c;
+    }
+
+    public String getViewName() {
+        return "SearchView";
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

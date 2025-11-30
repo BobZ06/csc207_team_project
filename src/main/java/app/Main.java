@@ -16,6 +16,7 @@ public class Main {
                 .addLoginUseCase()
                 .addSignupUseCase()
                 .addStarRateUseCase()
+                .addViewMenuUseCase()
                 .build();
         application.pack();
         application.setLocationRelativeTo(null);

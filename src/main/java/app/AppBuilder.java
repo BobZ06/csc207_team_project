@@ -209,24 +209,19 @@ public class AppBuilder {
     }
 
     public AppBuilder addViewMenuUseCase() {
-        // 1. Presenter
-        // [IMPORTANT] Ensure ViewMenuPresenter constructor accepts viewManagerModel!
-        ViewMenuOutputBoundary presenter =
-                new ViewMenuPresenter(menuViewModel, viewManagerModel);
 
-        // 2. Data Access Object wrapping the MenuService
+        ViewMenuOutputBoundary presenter =
+                new ViewMenuPresenter(menuViewModel, viewManagerModel, userDataAccessObject);
+
         ViewMenuDataAccessInterface menuDAO =
                 new APIMenuDataAccessObject(menuService);
 
-        // 3. Interactor
         ViewMenuInputBoundary interactor =
                 new ViewMenuInteractor(menuDAO, presenter);
 
-        // 4. Controller
         ViewMenuController controller =
                 new ViewMenuController(interactor);
 
-        // 5. Connect controller to UI (Menu View)
         menuView.setViewMenuController(controller);
 
         // 6. [NEW] Connect controller to Search View so the button works

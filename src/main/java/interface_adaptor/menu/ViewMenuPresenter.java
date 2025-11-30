@@ -4,6 +4,7 @@ import entity.MenuItem;
 import interface_adaptor.ViewManagerModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import use_case.log_in.LoginDataAccessInterface;
 import use_case.view_menu.ViewMenuOutputBoundary;
 import use_case.view_menu.ViewMenuOutputData;
 
@@ -13,10 +14,12 @@ public class ViewMenuPresenter implements ViewMenuOutputBoundary {
 
     private final MenuViewModel menuViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final LoginDataAccessInterface userDataAccess;
 
-    public ViewMenuPresenter(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel) {
+    public ViewMenuPresenter(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel, LoginDataAccessInterface userDataAccess) {
         this.menuViewModel = menuViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.userDataAccess = userDataAccess;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class ViewMenuPresenter implements ViewMenuOutputBoundary {
             }
         }
 
+        state.setUsername(userDataAccess.getCurrentUsername());
         state.setMenuList(items);
         state.setReviewError(null);
         menuViewModel.firePropertyChange();

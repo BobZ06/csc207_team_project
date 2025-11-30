@@ -70,7 +70,10 @@ public class AppBuilder {
     private MenuViewModel menuViewModel;
     private SignupViewModel signupViewModel;
     private SearchView searchView;
-    private RestaurantSearchViewModel searchViewModel;
+    private AddressSearchView addressSearchView;
+    private RestaurantSearchViewModel restaurantSearchViewModel;
+
+
 
 
     public AppBuilder() throws FileNotFoundException {
@@ -92,9 +95,9 @@ public class AppBuilder {
     }
 
     public AppBuilder addSearchView() {
-        searchViewModel = new RestaurantSearchViewModel();
-        searchView = new SearchView(searchViewModel);
-        cardPanel.add(searchView, searchView.getViewName());
+        restaurantSearchViewModel = new RestaurantSearchViewModel();
+        addressSearchView = new AddressSearchView(restaurantSearchViewModel);
+        cardPanel.add(addressSearchView, addressSearchView.getViewName());
         return this;
     }
 
@@ -136,7 +139,7 @@ public class AppBuilder {
         RestaurantSearchService yelpService = new YelpRestaurantSearchService();
 
         RestaurantSearchPresenter presenter =
-                new RestaurantSearchPresenter(searchViewModel, viewManagerModel);
+                new RestaurantSearchPresenter(restaurantSearchViewModel, viewManagerModel);
 
         RestaurantSearchInteractor interactor =
                 new RestaurantSearchInteractor(locationService, yelpService, presenter);
@@ -144,9 +147,11 @@ public class AppBuilder {
         RestaurantSearchController controller =
                 new RestaurantSearchController(interactor);
 
-        searchView.setController(controller);
+        addressSearchView.setController(controller);
+
         return this;
     }
+
 
     public AppBuilder addStarRateUseCase() throws RestaurantSearchService.RestaurantSearchException {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(

@@ -1,4 +1,5 @@
 package app;
+
 import data_access.*;
 
 import interface_adaptor.BlankViewModel;
@@ -35,6 +36,18 @@ import use_case.menu_search.MenuSearchInputBoundary;
 import use_case.menu_search.MenuSearchInteractor;
 import use_case.menu_search.MenuSearchOutputBoundary;
 
+import use_case.view_menu.ViewMenuInputBoundary;
+import use_case.view_menu.ViewMenuOutputBoundary;
+import use_case.view_menu.ViewMenuDataAccessInterface;
+import use_case.view_menu.ViewMenuInteractor;
+
+import data_access.APIMenuDataAccessObject;
+import interface_adaptor.Menu.ViewMenuController;
+import interface_adaptor.Menu.ViewMenuPresenter;
+
+import data_access.MenuService;
+import data_access.SpoonacularMenuService;
+
 
 // IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
 import entity.Restaurant;
@@ -69,31 +82,31 @@ public class AppBuilder {
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
     private SignupViewModel signupViewModel;
+    private final MenuService menuService = new SpoonacularMenuService();
     private SearchView searchView;
     private AddressSearchView addressSearchView;
     private RestaurantSearchViewModel restaurantSearchViewModel;
-
-
 
 
     public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
     }
 
-    public AppBuilder addBlankView(){
+    public AppBuilder addBlankView() {
         blankViewModel = new BlankViewModel();
         blankView = new BlankView();
         cardPanel.add(blankView, blankView.getViewName());
         return this;
     }
-    public AppBuilder addLoginView(){
+
+    public AppBuilder addLoginView() {
         loginViewModel = new LoginViewModel();
         loginViewModel.setViewManagerModel(viewManagerModel);
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
     }
-
+  
     public AppBuilder addSearchView() {
         restaurantSearchViewModel = new RestaurantSearchViewModel();
         addressSearchView = new AddressSearchView(restaurantSearchViewModel);
@@ -107,14 +120,15 @@ public class AppBuilder {
         cardPanel.add(menuView, menuView.getViewName());
         return this;
     }
-    public AppBuilder addSignupView(){
+
+    public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
         signupView = new SignupView(signupViewModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
 
-    public AppBuilder addLoginUseCase(){
+    public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(
                 blankViewModel, loginViewModel, viewManagerModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
@@ -124,7 +138,7 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder addSignupUseCase(){
+    public AppBuilder addSignupUseCase() {
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(
                 signupViewModel, viewManagerModel, loginViewModel);
         final SignupInputBoundary signupInteractor = new SignupInteractor(
@@ -214,6 +228,24 @@ public class AppBuilder {
 
         // YelpRestaurantSearchService apiCall = new YelpRestaurantSearchService();
         // ArrayList restaurantList = (ArrayList) apiCall.searchRestaurants(40.7128f, -74.0060f, "Burger", 10);
+
+        return this;
+    }
+
+    public AppBuilder addViewMenuUseCase() {
+        ViewMenuOutputBoundary presenter =
+                new ViewMenuPresenter(menuViewModel);
+
+        ViewMenuDataAccessInterface menuDAO =
+                new APIMenuDataAccessObject(menuService);
+
+        ViewMenuInputBoundary interactor =
+                new ViewMenuInteractor(menuDAO, presenter);
+
+        ViewMenuController controller =
+                new ViewMenuController(interactor);
+
+        menuView.setViewMenuController(controller);
 
         return this;
     }

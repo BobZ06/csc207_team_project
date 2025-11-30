@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import interface_adaptor.Menu.ViewMenuController;
 
 public class MenuView extends JPanel implements ActionListener, PropertyChangeListener{
     private final String viewName = "menu";
@@ -35,6 +36,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private interface_adaptor.Menu.MenuSearchController menuSearchController;
     private final JTextField searchField = new JTextField(15);
     private final JButton searchButton = new JButton("Search");
+    private ViewMenuController viewMenuController;
 
     // User information
     private final JLabel username = new JLabel("Signed in as: ");
@@ -167,6 +169,10 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
     public void setMenuSearchController(interface_adaptor.Menu.MenuSearchController menuSearchController) {
         this.menuSearchController = menuSearchController;
+    }
+
+    public void setViewMenuController(ViewMenuController viewMenuController) {
+        this.viewMenuController = viewMenuController;
     }
 
 }

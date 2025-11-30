@@ -1,32 +1,26 @@
 package use_case.view_menu;
 
+import org.json.JSONObject;
 
-public class ViewMenuInputData {
-
+public class ViewMenuOutputData {
 
     private final String restaurantName;
-    private final String zipCode;
-
-
     private final String restaurantAddress;
     private final double restaurantRating;
+    private final JSONObject menuData;
 
-    public ViewMenuInputData(String restaurantName,
-                             String zipCode,
-                             String restaurantAddress,
-                             double restaurantRating) {
+    public ViewMenuOutputData(String restaurantName,
+                              String restaurantAddress,
+                              double restaurantRating,
+                              JSONObject menuData) {
         this.restaurantName = restaurantName;
-        this.zipCode = zipCode;
         this.restaurantAddress = restaurantAddress;
         this.restaurantRating = restaurantRating;
+        this.menuData = menuData;
     }
 
     public String getRestaurantName() {
         return restaurantName;
-    }
-
-    public String getZipCode() {
-        return zipCode;
     }
 
     public String getRestaurantAddress() {
@@ -35,5 +29,9 @@ public class ViewMenuInputData {
 
     public double getRestaurantRating() {
         return restaurantRating;
+    }
+
+    public JSONObject getMenuData() {
+        return menuData;
     }
 }

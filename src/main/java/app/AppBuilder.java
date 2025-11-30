@@ -53,8 +53,6 @@ import interface_adaptor.menu.ViewMenuPresenter;
 import data_access.MenuService;
 import data_access.SpoonacularMenuService;
 
-
-// IMPORTANT!!!!! REMOVE THIS IN THE FINAL THING!!!!!!!
 import entity.Restaurant;
 import entity.User;
 
@@ -190,53 +188,14 @@ public class AppBuilder {
         StarRateController starRateController = new StarRateController(starRateInteractor);
         menuView.setStarRateController(starRateController);
 
-        // ---- IMPORTANT REMOVE WHEN DONE (USE CASE 3 & 5 DEMO) ----
-        ArrayList<Float> coords = new ArrayList<>();
-        coords.add(10f);
-        coords.add(10f);
-        Restaurant rest = new Restaurant(10f, coords, "Burger", "1042");
-        rest.setName("Burger King");
-        rest.setAddress("220 Yonge Street");
-
-        User user = new User("Username", "Password");
-
-        starRateDataAccessObject.save(rest.getId(), rest);
-        starRateDataAccessObject.setCurrentRestaurantId(rest.getId());
-        userDataAccessObject.save(user);
-        userDataAccessObject.setCurrentUsername(user.getName());
-
-        MenuState menuState = menuViewModel.getState();
-        menuState.setName(rest.getName());
-        menuState.setRestaurant(rest.getId());
-        menuState.setAddress(rest.getAddress());
-        menuState.setRating(rest.getAverageRating());
-        menuState.setUsername(user.getName());
-        menuViewModel.firePropertyChange();
-
-        // TEMP MENU
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Cheeseburger", 9.99f, "Beef burger with cheese"));
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Megaburger", 12.99f, "Double the meat, double the taste"));
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Salad", 8.99f, "With fresh greens and preferred sauce"));
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Fries", 3.99f, "Crispy french fries"));
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Diet Coke", 1.59f, "Ice-cold soft drink"));
-        menuDataAccessObject.addMenuItem(rest.getId(),
-                new MenuItem("Ketchup", 0.39f, "Good ol' ketchup"));
-
-        java.util.ArrayList<MenuItem> allItems =
-                new java.util.ArrayList<>(menuDataAccessObject.getMenu(rest.getId()));
-        menuState.setMenuList(allItems);
-        menuViewModel.firePropertyChange();
+        // [CLEANED] Removed all "Burger King" / "Magic Noodle House" temp initialization code.
+        // The app now starts clean.
 
         // Instead of TempMenuDataAccessObject, use the API DAO
         MenuSearchOutputBoundary menuSearchOutputBoundary =
                 new MenuSearchPresenter(menuViewModel);
 
-// Wrap the real MenuService in your API DAO
+        // Wrap the real MenuService in your API DAO
         APIMenuDataAccessObject apiMenuDAO = new APIMenuDataAccessObject(menuService);
 
         MenuSearchInputBoundary menuSearchInteractor =
@@ -246,17 +205,14 @@ public class AppBuilder {
                 new MenuSearchController(menuSearchInteractor);
         menuView.setMenuSearchController(menuSearchController);
 
-
-        // YelpRestaurantSearchService apiCall = new YelpRestaurantSearchService();
-        // ArrayList restaurantList = (ArrayList) apiCall.searchRestaurants(40.7128f, -74.0060f, "Burger", 10);
-
         return this;
     }
 
     public AppBuilder addViewMenuUseCase() {
         // 1. Presenter
+        // [IMPORTANT] Ensure ViewMenuPresenter constructor accepts viewManagerModel!
         ViewMenuOutputBoundary presenter =
-                new ViewMenuPresenter(menuViewModel);
+                new ViewMenuPresenter(menuViewModel, viewManagerModel);
 
         // 2. Data Access Object wrapping the MenuService
         ViewMenuDataAccessInterface menuDAO =
@@ -270,24 +226,16 @@ public class AppBuilder {
         ViewMenuController controller =
                 new ViewMenuController(interactor);
 
-        // 5. Connect controller to UI
+        // 5. Connect controller to UI (Menu View)
         menuView.setViewMenuController(controller);
 
-        // 6. TEMP: trigger the use case once, using the restaurant already set in MenuState
-        MenuState state = menuViewModel.getState();
-
-        // Only call if we actually have a restaurant name set
-        if (state.getName() != null && !state.getName().isEmpty()) {
-            System.out.println("[AppBuilder] Calling viewMenu for: " + state.getName());
-            controller.viewMenu(
-                    state.getName(),        // restaurantName
-                    "00000",                // fake zip for now
-                    state.getAddress(),     // address from star-rate set-up
-                    state.getRating()       // rating from star-rate set-up
-            );
-        } else {
-            System.out.println("[AppBuilder] MenuState has no restaurant name yet.");
+        // 6. [NEW] Connect controller to Search View so the button works
+        if (addressSearchView != null) {
+            addressSearchView.setViewMenuController(controller);
         }
+
+        // [CLEANED] Removed the auto-trigger block (TEMP logic).
+        // The use case is now triggered only when the user clicks the button.
 
         return this;
     }

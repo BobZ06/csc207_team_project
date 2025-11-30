@@ -83,6 +83,7 @@ public class AppBuilder {
     private MenuViewModel menuViewModel;
     private SignupViewModel signupViewModel;
     private final MenuService menuService = new SpoonacularMenuService();
+    // private final MenuService menuService = new MenuServiceForLocalTesting();
     private SearchView searchView;
     private AddressSearchView addressSearchView;
     private RestaurantSearchViewModel restaurantSearchViewModel;
@@ -106,7 +107,7 @@ public class AppBuilder {
         cardPanel.add(loginView, loginView.getViewName());
         return this;
     }
-  
+
     public AppBuilder addSearchView() {
         restaurantSearchViewModel = new RestaurantSearchViewModel();
         addressSearchView = new AddressSearchView(restaurantSearchViewModel);
@@ -114,7 +115,7 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder addMenuView(){
+    public AppBuilder addMenuView() {
         menuViewModel = new MenuViewModel();
         menuView = new MenuView(menuViewModel);
         cardPanel.add(menuView, menuView.getViewName());
@@ -217,10 +218,16 @@ public class AppBuilder {
         menuState.setMenuList(allItems);
         menuViewModel.firePropertyChange();
 
+        // Instead of TempMenuDataAccessObject, use the API DAO
         MenuSearchOutputBoundary menuSearchOutputBoundary =
                 new MenuSearchPresenter(menuViewModel);
+
+// Wrap the real MenuService in your API DAO
+        APIMenuDataAccessObject apiMenuDAO = new APIMenuDataAccessObject(menuService);
+
         MenuSearchInputBoundary menuSearchInteractor =
-                new MenuSearchInteractor(menuDataAccessObject, menuSearchOutputBoundary);
+                new MenuSearchInteractor(apiMenuDAO, menuSearchOutputBoundary);
+
         MenuSearchController menuSearchController =
                 new MenuSearchController(menuSearchInteractor);
         menuView.setMenuSearchController(menuSearchController);
@@ -233,19 +240,40 @@ public class AppBuilder {
     }
 
     public AppBuilder addViewMenuUseCase() {
+        // 1. Presenter
         ViewMenuOutputBoundary presenter =
                 new ViewMenuPresenter(menuViewModel);
 
+        // 2. Data Access Object wrapping the MenuService
         ViewMenuDataAccessInterface menuDAO =
                 new APIMenuDataAccessObject(menuService);
 
+        // 3. Interactor
         ViewMenuInputBoundary interactor =
                 new ViewMenuInteractor(menuDAO, presenter);
 
+        // 4. Controller
         ViewMenuController controller =
                 new ViewMenuController(interactor);
 
+        // 5. Connect controller to UI
         menuView.setViewMenuController(controller);
+
+        // 6. TEMP: trigger the use case once, using the restaurant already set in MenuState
+        MenuState state = menuViewModel.getState();
+
+        // Only call if we actually have a restaurant name set
+        if (state.getName() != null && !state.getName().isEmpty()) {
+            System.out.println("[AppBuilder] Calling viewMenu for: " + state.getName());
+            controller.viewMenu(
+                    state.getName(),        // restaurantName
+                    "00000",                // fake zip for now
+                    state.getAddress(),     // address from star-rate set-up
+                    state.getRating()       // rating from star-rate set-up
+            );
+        } else {
+            System.out.println("[AppBuilder] MenuState has no restaurant name yet.");
+        }
 
         return this;
     }

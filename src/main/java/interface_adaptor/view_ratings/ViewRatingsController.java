@@ -1,0 +1,17 @@
+package interface_adaptor.view_ratings;
+
+import use_case.view_ratings.ViewRatingsInputBoundary;
+import use_case.view_ratings.ViewRatingsInputData;
+
+public class ViewRatingsController {
+    final ViewRatingsInputBoundary interactor;
+
+    public ViewRatingsController(ViewRatingsInputBoundary interactor) {
+        this.interactor = interactor;
+    }
+
+    public void execute(String yelpID) {
+        ViewRatingsInputData inputData = new ViewRatingsInputData(yelpID);
+        interactor.execute(inputData);
+    }
+}

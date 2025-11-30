@@ -1,12 +1,11 @@
 package view;
 
-import interface_adaptor.RestaurantSearch.RestaurantSearchController;
-import interface_adaptor.RestaurantSearch.RestaurantSearchState;
-import interface_adaptor.RestaurantSearch.RestaurantSearchViewModel;
+import interface_adaptor.restaurant_search.RestaurantSearchController;
+import interface_adaptor.restaurant_search.RestaurantSearchState;
+import interface_adaptor.restaurant_search.RestaurantSearchViewModel;
 import entity.Restaurant;
 
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;

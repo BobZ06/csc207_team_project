@@ -1,8 +1,9 @@
 package view;
 
-import interface_adaptor.RestaurantSearch.RestaurantSearchController;
-import interface_adaptor.RestaurantSearch.RestaurantSearchState;
-import interface_adaptor.RestaurantSearch.RestaurantSearchViewModel;
+import interface_adaptor.log_out.LogoutController;
+import interface_adaptor.restaurant_search.RestaurantSearchController;
+import interface_adaptor.restaurant_search.RestaurantSearchState;
+import interface_adaptor.restaurant_search.RestaurantSearchViewModel;
 import entity.Restaurant;
 
 import javax.swing.*;
@@ -16,10 +17,12 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
 
     private final RestaurantSearchViewModel viewModel;
     private RestaurantSearchController controller;
+    private LogoutController logoutController;
 
     private final JTextField addressField = new JTextField(25);
     private final JButton searchButton = new JButton("Search");
     private final JButton menuButton = new JButton("Restaurant Menu");
+    private final JButton logoutButton = new JButton("Logout");
 
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final JList<String> resultsList = new JList<>(listModel);
@@ -51,15 +54,22 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
 
         resultsList.setBorder(new LineBorder(Color.BLACK, 1));
         add(new JScrollPane(resultsList));
+        add(logoutButton);
 
         searchButton.addActionListener(e ->
                 controller.execute(addressField.getText(), "food"));
+
+        logoutButton.addActionListener(e ->
+                logoutController.execute());
 
         menuButton.addActionListener(e -> System.out.println("Menu button clicked (attach logic)"));
     }
 
     public void setController(RestaurantSearchController c) {
         this.controller = c;
+    }
+    public void setLogoutController(LogoutController c) {
+        this.logoutController = c;
     }
 
     public String getViewName() { return "SearchView"; }

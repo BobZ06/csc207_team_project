@@ -3,22 +3,27 @@ package app;
 import data_access.*;
 
 import interface_adaptor.BlankViewModel;
-import interface_adaptor.Login.LoginController;
-import interface_adaptor.Login.LoginPresenter;
-import interface_adaptor.Login.LoginViewModel;
-import interface_adaptor.Menu.MenuViewModel;
-import interface_adaptor.Menu.StarRateController;
-import interface_adaptor.Menu.StarRatePresenter;
-import interface_adaptor.RestaurantSearch.RestaurantSearchController;
-import interface_adaptor.RestaurantSearch.RestaurantSearchPresenter;
-import interface_adaptor.RestaurantSearch.RestaurantSearchViewModel;
+import interface_adaptor.log_in.LoginController;
+import interface_adaptor.log_in.LoginPresenter;
+import interface_adaptor.log_in.LoginViewModel;
+import interface_adaptor.log_out.LogoutController;
+import interface_adaptor.log_out.LogoutPresenter;
+import interface_adaptor.menu.MenuViewModel;
+import interface_adaptor.menu.StarRateController;
+import interface_adaptor.menu.StarRatePresenter;
+import interface_adaptor.restaurant_search.RestaurantSearchController;
+import interface_adaptor.restaurant_search.RestaurantSearchPresenter;
+import interface_adaptor.restaurant_search.RestaurantSearchViewModel;
 import interface_adaptor.ViewManagerModel;
-import interface_adaptor.Signup.SignupController;
-import interface_adaptor.Signup.SignupPresenter;
-import interface_adaptor.Signup.SignupViewModel;
+import interface_adaptor.sign_up.SignupController;
+import interface_adaptor.sign_up.SignupPresenter;
+import interface_adaptor.sign_up.SignupViewModel;
 import use_case.log_in.LoginInputBoundary;
 import use_case.log_in.LoginInteractor;
 import use_case.log_in.LoginOutputBoundary;
+import use_case.log_out.LogoutInputBoundary;
+import use_case.log_out.LogoutInteractor;
+import use_case.log_out.LogoutOutputBoundary;
 import use_case.restaurant_search.RestaurantSearchInteractor;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
@@ -29,9 +34,9 @@ import use_case.star_rate.StarRateInteractor;
 import use_case.star_rate.StarRateOutputBoundary;
 import view.*;
 import entity.MenuItem;
-import interface_adaptor.Menu.MenuState;
-import interface_adaptor.Menu.MenuSearchController;
-import interface_adaptor.Menu.MenuSearchPresenter;
+import interface_adaptor.menu.MenuState;
+import interface_adaptor.menu.MenuSearchController;
+import interface_adaptor.menu.MenuSearchPresenter;
 import use_case.menu_search.MenuSearchInputBoundary;
 import use_case.menu_search.MenuSearchInteractor;
 import use_case.menu_search.MenuSearchOutputBoundary;
@@ -42,8 +47,8 @@ import use_case.view_menu.ViewMenuDataAccessInterface;
 import use_case.view_menu.ViewMenuInteractor;
 
 import data_access.APIMenuDataAccessObject;
-import interface_adaptor.Menu.ViewMenuController;
-import interface_adaptor.Menu.ViewMenuPresenter;
+import interface_adaptor.menu.ViewMenuController;
+import interface_adaptor.menu.ViewMenuPresenter;
 
 import data_access.MenuService;
 import data_access.SpoonacularMenuService;
@@ -136,6 +141,15 @@ public class AppBuilder {
                 userDataAccessObject, loginOutputBoundary);
         LoginController loginController = new LoginController(loginInteractor);
         loginView.setLoginController(loginController);
+        return this;
+    }
+
+    public AppBuilder addLogoutUseCase() {
+        final LogoutOutputBoundary logoutOutput = new LogoutPresenter(viewManagerModel, restaurantSearchViewModel,
+                loginViewModel);
+        final LogoutInputBoundary logoutInteractor = new LogoutInteractor(userDataAccessObject, logoutOutput);
+        LogoutController logoutController = new LogoutController(logoutInteractor);
+        addressSearchView.setLogoutController(logoutController);
         return this;
     }
 

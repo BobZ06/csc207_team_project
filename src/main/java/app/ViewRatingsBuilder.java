@@ -1,8 +1,8 @@
 package app;
 
-import interface_adaptor.ViewRatings.ViewRatingsController;
-import interface_adaptor.ViewRatings.ViewRatingsPresenter;
-import interface_adaptor.ViewRatings.ViewRatingsViewModel;
+import interface_adaptor.view_ratings.ViewRatingsController;
+import interface_adaptor.view_ratings.ViewRatingsPresenter;
+import interface_adaptor.view_ratings.ViewRatingsViewModel;
 import use_case.view_ratings.ViewRatingsDataAccessInterface;
 import use_case.view_ratings.ViewRatingsInputBoundary;
 import use_case.view_ratings.ViewRatingsInteractor;

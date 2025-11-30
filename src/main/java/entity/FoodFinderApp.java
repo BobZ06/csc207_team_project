@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
+
 public class FoodFinderApp {
     private List<Restaurant> restaurantList;
     private User currentUser;
@@ -20,6 +21,10 @@ public class FoodFinderApp {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public void setRestaurantList(List<Restaurant> restaurantList) {
+        this.restaurantList = restaurantList;
     }
 
     public List<Restaurant> getFullRestaurantlist() {

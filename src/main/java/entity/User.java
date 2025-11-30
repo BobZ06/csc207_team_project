@@ -1,4 +1,5 @@
 package entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,12 @@ public class User {
         this.coords[1] = 0f;
         this.reviewedRests = new ArrayList<String>();
     }
+
+    public void setCoords(float lat, float lng) {
+        this.coords[0] = lat;
+        this.coords[1] = lng;
+    }
+
     public String getName(){
         return this.name;
     }

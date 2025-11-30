@@ -15,6 +15,7 @@ public class Main {
                 .addMenuView()
                 .addSignupView()
                 .addLoginUseCase()
+                .addLogoutUseCase()
                 .addSignupUseCase()
                 .addRestaurantSearchUseCase()
                 .addStarRateUseCase()

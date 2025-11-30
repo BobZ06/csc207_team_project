@@ -9,9 +9,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import interface_adaptor.Login.LoginController;
-import interface_adaptor.Login.LoginState;
-import interface_adaptor.Login.LoginViewModel;
+import interface_adaptor.log_in.LoginController;
+import interface_adaptor.log_in.LoginState;
+import interface_adaptor.log_in.LoginViewModel;
 
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener{
     private final String viewName = "Login";

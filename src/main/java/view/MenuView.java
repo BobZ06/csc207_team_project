@@ -1,19 +1,17 @@
 package view;
 
 import data_access.RestaurantSearchService;
-import interface_adaptor.Menu.MenuState;
-import interface_adaptor.Menu.MenuViewModel;
-import interface_adaptor.Menu.StarRateController;
+import interface_adaptor.menu.MenuState;
+import interface_adaptor.menu.MenuViewModel;
+import interface_adaptor.menu.StarRateController;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import interface_adaptor.Menu.ViewMenuController;
+import interface_adaptor.menu.ViewMenuController;
 
 public class MenuView extends JPanel implements ActionListener, PropertyChangeListener{
     private final String viewName = "menu";
@@ -33,7 +31,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private final JScrollPane scrollPane = new JScrollPane(menuItems);
 
     // Use case 3 - menu search
-    private interface_adaptor.Menu.MenuSearchController menuSearchController;
+    private interface_adaptor.menu.MenuSearchController menuSearchController;
     private final JTextField searchField = new JTextField(15);
     private final JButton searchButton = new JButton("Search");
     private ViewMenuController viewMenuController;
@@ -167,7 +165,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
     public void setStarRateController(StarRateController rateController){this.starRateController = rateController;}
 
-    public void setMenuSearchController(interface_adaptor.Menu.MenuSearchController menuSearchController) {
+    public void setMenuSearchController(interface_adaptor.menu.MenuSearchController menuSearchController) {
         this.menuSearchController = menuSearchController;
     }
 

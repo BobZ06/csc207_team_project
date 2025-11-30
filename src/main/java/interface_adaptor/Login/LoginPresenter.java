@@ -19,7 +19,7 @@ public class LoginPresenter implements LoginOutputBoundary{
 
     @Override
     public void prepareSuccessView(LoginOutputData output) {
-        this.viewModel.setState("menu");
+        this.viewModel.setState("SearchView");
         this.viewModel.firePropertyChange();
     }
 

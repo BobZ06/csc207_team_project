@@ -8,6 +8,9 @@ import interface_adaptor.Login.LoginViewModel;
 import interface_adaptor.Menu.MenuViewModel;
 import interface_adaptor.Menu.StarRateController;
 import interface_adaptor.Menu.StarRatePresenter;
+import interface_adaptor.RestaurantSearch.RestaurantSearchController;
+import interface_adaptor.RestaurantSearch.RestaurantSearchPresenter;
+import interface_adaptor.RestaurantSearch.RestaurantSearchViewModel;
 import interface_adaptor.ViewManagerModel;
 import interface_adaptor.Signup.SignupController;
 import interface_adaptor.Signup.SignupPresenter;
@@ -15,6 +18,7 @@ import interface_adaptor.Signup.SignupViewModel;
 import use_case.log_in.LoginInputBoundary;
 import use_case.log_in.LoginInteractor;
 import use_case.log_in.LoginOutputBoundary;
+import use_case.restaurant_search.RestaurantSearchInteractor;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -65,6 +69,12 @@ public class AppBuilder {
     private LoginViewModel loginViewModel;
     private MenuViewModel menuViewModel;
     private SignupViewModel signupViewModel;
+    private SearchView searchView;
+    private AddressSearchView addressSearchView;
+    private RestaurantSearchViewModel restaurantSearchViewModel;
+
+
+
 
     public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
@@ -81,6 +91,13 @@ public class AppBuilder {
         loginViewModel.setViewManagerModel(viewManagerModel);
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addSearchView() {
+        restaurantSearchViewModel = new RestaurantSearchViewModel();
+        addressSearchView = new AddressSearchView(restaurantSearchViewModel);
+        cardPanel.add(addressSearchView, addressSearchView.getViewName());
         return this;
     }
 
@@ -116,6 +133,25 @@ public class AppBuilder {
         signupView.setSignupController(signupController);
         return this;
     }
+
+    public AppBuilder addRestaurantSearchUseCase() {
+        LocationService locationService = new GoogleMapsLocationService();
+        RestaurantSearchService yelpService = new YelpRestaurantSearchService();
+
+        RestaurantSearchPresenter presenter =
+                new RestaurantSearchPresenter(restaurantSearchViewModel, viewManagerModel);
+
+        RestaurantSearchInteractor interactor =
+                new RestaurantSearchInteractor(locationService, yelpService, presenter);
+
+        RestaurantSearchController controller =
+                new RestaurantSearchController(interactor);
+
+        addressSearchView.setController(controller);
+
+        return this;
+    }
+
 
     public AppBuilder addStarRateUseCase() throws RestaurantSearchService.RestaurantSearchException {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(

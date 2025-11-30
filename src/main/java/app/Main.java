@@ -11,10 +11,12 @@ public class Main {
                 .addBlankView()
                 .addLoginView()
                 .addSignupView()
+                .addSearchView()
                 .addMenuView()
                 .addSignupView()
                 .addLoginUseCase()
                 .addSignupUseCase()
+                .addRestaurantSearchUseCase()
                 .addStarRateUseCase()
                 .build();
         application.pack();

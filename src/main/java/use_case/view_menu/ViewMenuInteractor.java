@@ -16,20 +16,18 @@ public class ViewMenuInteractor implements ViewMenuInputBoundary {
 
     @Override
     public void execute(ViewMenuInputData inputData) {
+        System.out.println("[ViewMenuInteractor] execute called for: " + inputData.getRestaurantName());
         try {
-            // Call through the interface, not directly on any concrete API class.
             JSONObject menuJson = menuDataAccess.getRestaurantMenu(
                     inputData.getRestaurantName(),
                     inputData.getZipCode()
             );
-
             ViewMenuOutputData outputData = new ViewMenuOutputData(
                     inputData.getRestaurantName(),
                     inputData.getRestaurantAddress(),
                     inputData.getRestaurantRating(),
                     menuJson
             );
-
             presenter.prepareSuccessView(outputData);
         } catch (Exception e) {
             presenter.prepareFailView(e.getMessage());

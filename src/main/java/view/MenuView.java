@@ -63,6 +63,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         // Initialize View Reviews Button
         viewReviews = new JButton("See Reviews");
         viewReviews.setAlignmentX(Component.CENTER_ALIGNMENT);
+        reviewErrorField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         star1 = new JRadioButton("1");
         star2 = new JRadioButton("2");

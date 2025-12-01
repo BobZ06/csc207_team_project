@@ -58,7 +58,7 @@ import entity.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AppBuilder {
@@ -68,7 +68,7 @@ public class AppBuilder {
     final ViewManagerModel viewManagerModel = new ViewManagerModel();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    final TempUserDataAccessObject userDataAccessObject = new TempUserDataAccessObject();
+    final FileUserDataAccessObject userDataAccessObject = new FileUserDataAccessObject("users.csv");
     final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
@@ -85,7 +85,7 @@ public class AppBuilder {
     private AddressSearchView addressSearchView;
     private RestaurantSearchViewModel restaurantSearchViewModel;
 
-    public AppBuilder() throws FileNotFoundException {
+    public AppBuilder() throws IOException {
         cardPanel.setLayout(cardLayout);
     }
 

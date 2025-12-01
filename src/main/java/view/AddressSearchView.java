@@ -104,9 +104,6 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
         this.viewMenuController = c;
     }
 
-    public void setViewMenuController(ViewMenuController c) {
-        this.viewMenuController = c;
-    }
 
     public String getViewName() {
         return "SearchView";

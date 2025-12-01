@@ -131,9 +131,9 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                     return;
                 }
                 MenuState currState = menuViewModel.getState();
-                String restaurantID = currState.getRestaurantId();
+                String restaurantName = currState.getName();
                 String query = searchField.getText();
-                menuSearchController.execute(restaurantID, query);
+                menuSearchController.execute(restaurantName, query);
             }
         });
 

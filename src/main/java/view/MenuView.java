@@ -4,6 +4,10 @@ import data_access.RestaurantSearchService;
 import interface_adaptor.menu.MenuState;
 import interface_adaptor.menu.MenuViewModel;
 import interface_adaptor.menu.StarRateController;
+import interface_adaptor.menu.ViewMenuController;
+import interface_adaptor.view_ratings.ViewRatingsController;
+import interface_adaptor.view_ratings.ViewRatingsState;
+import interface_adaptor.view_ratings.ViewRatingsViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +15,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import interface_adaptor.menu.ViewMenuController;
 
-public class MenuView extends JPanel implements ActionListener, PropertyChangeListener{
+public class MenuView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "menu";
     private final MenuViewModel menuViewModel;
+
+    // View Ratings Components
+    private ViewRatingsController viewRatingsController;
+    private ViewRatingsViewModel viewRatingsViewModel;
+    private final JButton viewReviews;
 
     // Star Rate UI Items
     private final JLabel averageRatingField = new JLabel("Average Rating: 0");
@@ -39,7 +47,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     // User information
     private final JLabel username = new JLabel("Signed in as: ");
 
-    public MenuView(MenuViewModel menuViewModel){
+    public MenuView(MenuViewModel menuViewModel) {
         this.menuViewModel = menuViewModel;
         this.menuViewModel.addPropertyChangeListener(this);
 
@@ -47,56 +55,74 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         averageRatingField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Initialize the new buttons and add them into a JPanel
+        // Initialize buttons
         final JPanel buttons = new JPanel();
         rate = new JButton("Rate");
         rate.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        star1 = new JRadioButton("1"); star2 = new JRadioButton("2");
-        star3 = new JRadioButton("3"); star4 = new JRadioButton("4"); star5 = new JRadioButton("5");
-        final ButtonGroup group = new ButtonGroup();
-        group.add(star1); group.add(star2); group.add(star3); group.add(star4); group.add(star5);
+        // Initialize View Reviews Button
+        viewReviews = new JButton("See Reviews");
+        viewReviews.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        buttons.add(star1); buttons.add(star2); buttons.add(star3); buttons.add(star4); buttons.add(star5);
+        star1 = new JRadioButton("1");
+        star2 = new JRadioButton("2");
+        star3 = new JRadioButton("3");
+        star4 = new JRadioButton("4");
+        star5 = new JRadioButton("5");
+        final ButtonGroup group = new ButtonGroup();
+        group.add(star1);
+        group.add(star2);
+        group.add(star3);
+        group.add(star4);
+        group.add(star5);
+
+        buttons.add(star1);
+        buttons.add(star2);
+        buttons.add(star3);
+        buttons.add(star4);
+        buttons.add(star5);
 
         // Initialize the Restaurant information
         final JPanel restaurantInfo = new JPanel();
-        restaurantName = new JLabel("Restaurant Name"); address = new JLabel("Address");
-        restaurantInfo.add(restaurantName); restaurantInfo.add(address);
+        restaurantName = new JLabel("Restaurant Name");
+        address = new JLabel("Address");
+        restaurantInfo.add(restaurantName);
+        restaurantInfo.add(address);
 
-        rate.addActionListener(
-                new ActionListener(){
-                    public void actionPerformed(ActionEvent evt){
-                        int userInputRating = 0;
-                        if (star1.isSelected()){
-                            userInputRating = 1;
-                        }
-                        else if (star2.isSelected()){
-                            userInputRating = 2;
-                        }
-                        else if (star3.isSelected()){
-                            userInputRating = 3;
-                        }
-                        else if (star4.isSelected()){
-                            userInputRating = 4;
-                        }
-                        else if (star5.isSelected()){
-                            userInputRating = 5;
-                        }
+        // Rate Button Listener
+        rate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                int userInputRating = 0;
+                if (star1.isSelected()) userInputRating = 1;
+                else if (star2.isSelected()) userInputRating = 2;
+                else if (star3.isSelected()) userInputRating = 3;
+                else if (star4.isSelected()) userInputRating = 4;
+                else if (star5.isSelected()) userInputRating = 5;
 
-                        final MenuState currentState = menuViewModel.getState();
-
-                        try {
-                            starRateController.execute(userInputRating, currentState.getRestaurantId());
-                        } catch (RestaurantSearchService.RestaurantSearchException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-                    }
+                final MenuState currentState = menuViewModel.getState();
+                try {
+                    starRateController.execute(userInputRating, currentState.getRestaurantId());
+                } catch (RestaurantSearchService.RestaurantSearchException e) {
+                    throw new RuntimeException(e);
                 }
-        );
+            }
+        });
 
+        // View Reviews Button Listener
+        viewReviews.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuState currentState = menuViewModel.getState();
+                String restaurantId = currentState.getRestaurantId();
+                if (viewRatingsController != null && restaurantId != null && !restaurantId.isEmpty()) {
+                    viewRatingsController.execute(restaurantId);
+                } else {
+                    JOptionPane.showMessageDialog(MenuView.this, "Cannot fetch reviews: Missing Controller or ID");
+                }
+            }
+        });
+
+        // Search Button Listener
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -107,12 +133,11 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                 MenuState currState = menuViewModel.getState();
                 String restaurantID = currState.getRestaurantId();
                 String query = searchField.getText();
-                System.out.println("Search clicked, restaurantId=" + restaurantID + ", query=" + query);
                 menuSearchController.execute(restaurantID, query);
             }
         });
 
-        // Search panel (Use case 3)
+        // Search panel
         final JPanel searchPanel = new JPanel();
         searchPanel.add(new JLabel("Search item:"));
         searchPanel.add(searchField);
@@ -122,6 +147,11 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         topUserPanel.add(username);
         topUserPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
+        // Bottom buttons panel
+        JPanel bottomButtons = new JPanel();
+        bottomButtons.add(rate);
+        bottomButtons.add(viewReviews);
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
         this.add(topUserPanel);
@@ -130,26 +160,47 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(scrollPane);
         this.add(buttons);
         this.add(averageRatingField);
-        this.add(rate);
+        this.add(bottomButtons);
         this.add(reviewErrorField);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final MenuState state = (MenuState) evt.getNewValue();
-        setFields(state);
+        // Handle ViewRatingsState changes
+        if (evt.getNewValue() instanceof ViewRatingsState) {
+            ViewRatingsState state = (ViewRatingsState) evt.getNewValue();
+            if (state.getError() != null) {
+                JOptionPane.showMessageDialog(this, "Error fetching reviews: " + state.getError());
+            } else if (state.getReviews() != null && !state.getReviews().isEmpty()) {
+                String allReviews = String.join("\n\n", state.getReviews());
+                JTextArea textArea = new JTextArea(allReviews);
+                textArea.setRows(10);
+                textArea.setColumns(40);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                JOptionPane.showMessageDialog(this, scrollPane, "Yelp Reviews", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No reviews found for this restaurant.");
+            }
+        }
+        // Handle MenuState changes
+        else if (evt.getNewValue() instanceof MenuState) {
+            final MenuState state = (MenuState) evt.getNewValue();
+            setFields(state);
+        }
     }
 
     private void setFields(MenuState state) {
-        averageRatingField.setText("Average Rating: "+String.valueOf(state.getRating()));
+        averageRatingField.setText("Average Rating: " + String.valueOf(state.getRating()));
         restaurantName.setText(state.getName());
         address.setText(state.getAddress());
-        username.setText("Signed in as: "+state.getUsername());
+        username.setText("Signed in as: " + state.getUsername());
         reviewErrorField.setText(state.getReviewError());
 
         java.util.ArrayList<entity.MenuItem> menu = state.getMenuList();
@@ -158,16 +209,19 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         if (menu != null) {
             for (entity.MenuItem item : menu) {
                 listModel.addElement(item.getName() + " - $" + item.getPrice()
-                + " | " + item.getDescription());
+                        + " | " + item.getDescription());
             }
         }
         menuItems.setModel(listModel);
     }
+
     public String getViewName() {
         return viewName;
     }
 
-    public void setStarRateController(StarRateController rateController){this.starRateController = rateController;}
+    public void setStarRateController(StarRateController rateController) {
+        this.starRateController = rateController;
+    }
 
     public void setMenuSearchController(interface_adaptor.menu.MenuSearchController menuSearchController) {
         this.menuSearchController = menuSearchController;
@@ -177,6 +231,12 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         this.viewMenuController = viewMenuController;
     }
 
+    public void setViewRatingsController(ViewRatingsController controller) {
+        this.viewRatingsController = controller;
+    }
+
+    public void setViewRatingsViewModel(ViewRatingsViewModel viewModel) {
+        this.viewRatingsViewModel = viewModel;
+        this.viewRatingsViewModel.addPropertyChangeListener(this);
+    }
 }
-
-

@@ -20,12 +20,14 @@ public class ViewMenuController {
      * @param rating             rating to show in the view
      */
     public void viewMenu(String restaurantName,
+                         String restaurantId,
                          String zipCode,
                          String restaurantAddress,
                          double rating) {
 
         ViewMenuInputData inputData = new ViewMenuInputData(
                 restaurantName,
+                restaurantId,
                 zipCode,
                 restaurantAddress,
                 rating

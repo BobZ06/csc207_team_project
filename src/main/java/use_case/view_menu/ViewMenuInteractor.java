@@ -24,6 +24,7 @@ public class ViewMenuInteractor implements ViewMenuInputBoundary {
             );
             ViewMenuOutputData outputData = new ViewMenuOutputData(
                     inputData.getRestaurantName(),
+                    inputData.getRestaurantId(),
                     inputData.getRestaurantAddress(),
                     inputData.getRestaurantRating(),
                     menuJson

@@ -13,13 +13,13 @@ public class Main {
                 .addSignupView()
                 .addSearchView()
                 .addMenuView()
-                .addSignupView()
                 .addLoginUseCase()
                 .addLogoutUseCase()
                 .addSignupUseCase()
                 .addRestaurantSearchUseCase()
                 .addStarRateUseCase()
                 .addViewMenuUseCase()
+                .addViewRatingsUseCase()
                 .build();
         application.pack();
         application.setLocationRelativeTo(null);

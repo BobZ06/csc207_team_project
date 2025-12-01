@@ -99,10 +99,6 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
     public void setLogoutController(LogoutController c) {
         this.logoutController = c;
     }
-    // 4. 新增 Setter
-    public void setViewMenuController(ViewMenuController c) {
-        this.viewMenuController = c;
-    }
 
     public void setViewMenuController(ViewMenuController c) {
         this.viewMenuController = c;

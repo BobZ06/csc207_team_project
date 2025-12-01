@@ -27,6 +27,7 @@ public class ViewMenuPresenter implements ViewMenuOutputBoundary {
         MenuState state = menuViewModel.getState();
 
         state.setName(outputData.getRestaurantName());
+        state.setRestaurant(outputData.getRestaurantId());
         state.setAddress(outputData.getRestaurantAddress());
         state.setRating((float) outputData.getRestaurantRating());
 

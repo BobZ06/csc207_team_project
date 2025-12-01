@@ -18,6 +18,10 @@ import interface_adaptor.ViewManagerModel;
 import interface_adaptor.sign_up.SignupController;
 import interface_adaptor.sign_up.SignupPresenter;
 import interface_adaptor.sign_up.SignupViewModel;
+import interface_adaptor.view_ratings.ViewRatingsController;
+import interface_adaptor.view_ratings.ViewRatingsPresenter;
+import interface_adaptor.view_ratings.ViewRatingsViewModel;
+
 import use_case.log_in.LoginInputBoundary;
 import use_case.log_in.LoginInteractor;
 import use_case.log_in.LoginOutputBoundary;
@@ -32,26 +36,25 @@ import use_case.star_rate.StarRateDataAccessInterface;
 import use_case.star_rate.StarRateInputBoundary;
 import use_case.star_rate.StarRateInteractor;
 import use_case.star_rate.StarRateOutputBoundary;
+import use_case.menu_search.MenuSearchInputBoundary;
+import use_case.menu_search.MenuSearchInteractor;
+import use_case.menu_search.MenuSearchOutputBoundary;
+import use_case.view_menu.ViewMenuInputBoundary;
+import use_case.view_menu.ViewMenuOutputBoundary;
+import use_case.view_menu.ViewMenuDataAccessInterface;
+import use_case.view_menu.ViewMenuInteractor;
+import use_case.view_ratings.ViewRatingsDataAccessInterface;
+import use_case.view_ratings.ViewRatingsInputBoundary;
+import use_case.view_ratings.ViewRatingsInteractor;
+import use_case.view_ratings.ViewRatingsOutputBoundary;
+
 import view.*;
 import entity.MenuItem;
 import interface_adaptor.menu.MenuState;
 import interface_adaptor.menu.MenuSearchController;
 import interface_adaptor.menu.MenuSearchPresenter;
-import use_case.menu_search.MenuSearchInputBoundary;
-import use_case.menu_search.MenuSearchInteractor;
-import use_case.menu_search.MenuSearchOutputBoundary;
-
-import use_case.view_menu.ViewMenuInputBoundary;
-import use_case.view_menu.ViewMenuOutputBoundary;
-import use_case.view_menu.ViewMenuDataAccessInterface;
-import use_case.view_menu.ViewMenuInteractor;
-
-import data_access.APIMenuDataAccessObject;
 import interface_adaptor.menu.ViewMenuController;
 import interface_adaptor.menu.ViewMenuPresenter;
-
-import data_access.MenuService;
-import data_access.SpoonacularMenuService;
 
 import entity.Restaurant;
 import entity.User;
@@ -84,6 +87,9 @@ public class AppBuilder {
     private SearchView searchView;
     private AddressSearchView addressSearchView;
     private RestaurantSearchViewModel restaurantSearchViewModel;
+
+    // View Ratings ViewModel
+    private ViewRatingsViewModel viewRatingsViewModel;
 
     public AppBuilder() throws IOException {
         cardPanel.setLayout(cardLayout);
@@ -183,7 +189,6 @@ public class AppBuilder {
         MenuSearchOutputBoundary menuSearchOutputBoundary =
                 new MenuSearchPresenter(menuViewModel);
 
-  
         APIMenuDataAccessObject apiMenuDAO = new APIMenuDataAccessObject(menuService);
 
         MenuSearchInputBoundary menuSearchInteractor =
@@ -197,7 +202,7 @@ public class AppBuilder {
     }
 
     public AppBuilder addViewMenuUseCase() {
-
+        // Fix: Added missing arguments (viewManagerModel, userDataAccessObject)
         ViewMenuOutputBoundary presenter =
                 new ViewMenuPresenter(menuViewModel, viewManagerModel, userDataAccessObject);
 
@@ -212,9 +217,27 @@ public class AppBuilder {
 
         menuView.setViewMenuController(controller);
 
-       
         if (addressSearchView != null) {
             addressSearchView.setViewMenuController(controller);
+        }
+
+        return this;
+    }
+
+    public AppBuilder addViewRatingsUseCase() {
+        this.viewRatingsViewModel = new ViewRatingsViewModel();
+
+        ViewRatingsDataAccessInterface reviewsDAO = new YelpReviewDataAccessObject();
+
+        ViewRatingsOutputBoundary presenter = new ViewRatingsPresenter(viewRatingsViewModel);
+
+        ViewRatingsInputBoundary interactor = new ViewRatingsInteractor(reviewsDAO, presenter);
+
+        ViewRatingsController controller = new ViewRatingsController(interactor);
+
+        if (menuView != null) {
+            menuView.setViewRatingsController(controller);
+            menuView.setViewRatingsViewModel(viewRatingsViewModel);
         }
 
         return this;

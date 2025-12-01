@@ -83,6 +83,7 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
                 if (viewMenuController != null) {
                     viewMenuController.viewMenu(
                             selected.getName(),
+                            selected.getId(),
                             selected.getZipCode(),
                             selected.getAddress(),
                             selected.getAverageRating()

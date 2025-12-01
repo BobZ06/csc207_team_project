@@ -120,6 +120,7 @@ public class APIMenuDataAccessObject implements
             items.put(createItem("Potato Chips", 2.00));
             items.put(createItem("Cookie", 1.25));
         }
+        
         else {
             items.put(createItem("House Special", 15.99));
             items.put(createItem("Daily Soup", 6.99));
@@ -144,7 +145,6 @@ public class APIMenuDataAccessObject implements
     @Override
     public List<MenuItem> getMenu(String restaurantName) {
         try {
-            // Attempt to get data (API -> Fallback)
             JSONObject menuJson = getRestaurantMenu(restaurantName, "00000");
             JSONArray arr = menuJson.getJSONArray("menuItems");
 
@@ -160,7 +160,6 @@ public class APIMenuDataAccessObject implements
             return list;
 
         } catch (Exception e) {
-            // Absolute last resort if even local generation fails (unlikely)
             List<MenuItem> fallback = new ArrayList<>();
             fallback.add(new MenuItem("Error loading menu", 0.0f, "Please try again"));
             return fallback;

@@ -95,6 +95,7 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
     public void setController(RestaurantSearchController c) {
         this.controller = c;
     }
+
     public void setLogoutController(LogoutController c) {
         this.logoutController = c;
     }
@@ -103,7 +104,13 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
         this.viewMenuController = c;
     }
 
-    public String getViewName() { return "SearchView"; }
+    public void setViewMenuController(ViewMenuController c) {
+        this.viewMenuController = c;
+    }
+
+    public String getViewName() {
+        return "SearchView";
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

@@ -68,13 +68,8 @@ public class AppBuilder {
     final ViewManagerModel viewManagerModel = new ViewManagerModel();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // Data Access Object Temp User Data:
     final TempUserDataAccessObject userDataAccessObject = new TempUserDataAccessObject();
-
-    // Data Access Object Temp Star Rate:
     final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
-
-    // Data Access Object Temp Menu:
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
     private BlankView blankView;
@@ -86,11 +81,9 @@ public class AppBuilder {
     private MenuViewModel menuViewModel;
     private SignupViewModel signupViewModel;
     private final MenuService menuService = new SpoonacularMenuService();
-    // private final MenuService menuService = new MenuServiceForLocalTesting();
     private SearchView searchView;
     private AddressSearchView addressSearchView;
     private RestaurantSearchViewModel restaurantSearchViewModel;
-
 
     public AppBuilder() throws FileNotFoundException {
         cardPanel.setLayout(cardLayout);
@@ -179,7 +172,6 @@ public class AppBuilder {
         return this;
     }
 
-
     public AppBuilder addStarRateUseCase() throws RestaurantSearchService.RestaurantSearchException {
         final StarRateOutputBoundary starRateOutputBoundary = new StarRatePresenter(
                 viewManagerModel, menuViewModel);
@@ -188,14 +180,10 @@ public class AppBuilder {
         StarRateController starRateController = new StarRateController(starRateInteractor);
         menuView.setStarRateController(starRateController);
 
-        // [CLEANED] Removed all "Burger King" / "Magic Noodle House" temp initialization code.
-        // The app now starts clean.
-
-        // Instead of TempMenuDataAccessObject, use the API DAO
         MenuSearchOutputBoundary menuSearchOutputBoundary =
                 new MenuSearchPresenter(menuViewModel);
 
-        // Wrap the real MenuService in your API DAO
+  
         APIMenuDataAccessObject apiMenuDAO = new APIMenuDataAccessObject(menuService);
 
         MenuSearchInputBoundary menuSearchInteractor =
@@ -224,13 +212,10 @@ public class AppBuilder {
 
         menuView.setViewMenuController(controller);
 
-        // 6. [NEW] Connect controller to Search View so the button works
+       
         if (addressSearchView != null) {
             addressSearchView.setViewMenuController(controller);
         }
-
-        // [CLEANED] Removed the auto-trigger block (TEMP logic).
-        // The use case is now triggered only when the user clicks the button.
 
         return this;
     }

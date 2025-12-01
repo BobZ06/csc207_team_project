@@ -72,7 +72,7 @@ public class AppBuilder {
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
     final FileUserDataAccessObject userDataAccessObject = new FileUserDataAccessObject("users.csv");
-    final StarRateDataAccessInterface starRateDataAccessObject = new TempFileStarRateDAO("restaurants.csv");
+    final StarRateDataAccessInterface starRateDataAccessObject = new APIStarRateDataAccessObject("restaurants.csv");
     final TempMenuDataAccessObject menuDataAccessObject = new TempMenuDataAccessObject();
 
     private BlankView blankView;

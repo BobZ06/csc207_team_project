@@ -183,6 +183,7 @@ public class AppBuilder {
         MenuSearchOutputBoundary menuSearchOutputBoundary =
                 new MenuSearchPresenter(menuViewModel);
 
+  
         APIMenuDataAccessObject apiMenuDAO = new APIMenuDataAccessObject(menuService);
 
         MenuSearchInputBoundary menuSearchInteractor =
@@ -196,8 +197,9 @@ public class AppBuilder {
     }
 
     public AppBuilder addViewMenuUseCase() {
+
         ViewMenuOutputBoundary presenter =
-                new ViewMenuPresenter(menuViewModel, viewManagerModel);
+                new ViewMenuPresenter(menuViewModel, viewManagerModel, userDataAccessObject);
 
         ViewMenuDataAccessInterface menuDAO =
                 new APIMenuDataAccessObject(menuService);
@@ -210,6 +212,7 @@ public class AppBuilder {
 
         menuView.setViewMenuController(controller);
 
+       
         if (addressSearchView != null) {
             addressSearchView.setViewMenuController(controller);
         }

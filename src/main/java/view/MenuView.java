@@ -118,9 +118,13 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
+        JPanel topUserPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        topUserPanel.add(username);
+        topUserPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
-        this.add(username);
+        this.add(topUserPanel);
         this.add(restaurantInfo);
         this.add(searchPanel);
         this.add(scrollPane);

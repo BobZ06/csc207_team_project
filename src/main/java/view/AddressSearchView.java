@@ -56,7 +56,12 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
 
         resultsList.setBorder(new LineBorder(Color.BLACK, 1));
         add(new JScrollPane(resultsList));
-        add(logoutButton);
+
+        JPanel logoutPanel = new JPanel();
+        logoutPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        logoutPanel.add(logoutButton);
+        logoutPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        add(logoutPanel);
 
         searchButton.addActionListener(e ->
                 controller.execute(addressField.getText(), "food"));
@@ -93,6 +98,10 @@ public class AddressSearchView extends JPanel implements PropertyChangeListener 
 
     public void setLogoutController(LogoutController c) {
         this.logoutController = c;
+    }
+    // 4. 新增 Setter
+    public void setViewMenuController(ViewMenuController c) {
+        this.viewMenuController = c;
     }
 
     public void setViewMenuController(ViewMenuController c) {

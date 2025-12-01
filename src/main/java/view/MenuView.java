@@ -23,6 +23,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private final JButton rate;
     private final JRadioButton star1, star2, star3, star4, star5;
     private final JLabel reviewErrorField = new JLabel();
+    private final JButton backButton = new JButton("Back to Search");
+
 
     // Restaurant Information UI Items
     private final JLabel restaurantName;
@@ -122,6 +124,12 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         topUserPanel.add(username);
         topUserPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
+        JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        backPanel.add(backButton);
+        backPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
         this.add(topUserPanel);
@@ -129,6 +137,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(searchPanel);
         this.add(scrollPane);
         this.add(buttons);
+        this.add(backPanel);
         this.add(averageRatingField);
         this.add(rate);
         this.add(reviewErrorField);
@@ -158,7 +167,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         if (menu != null) {
             for (entity.MenuItem item : menu) {
                 listModel.addElement(item.getName() + " - $" + item.getPrice()
-                + " | " + item.getDescription());
+                        + " | " + item.getDescription());
             }
         }
         menuItems.setModel(listModel);

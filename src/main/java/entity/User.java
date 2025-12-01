@@ -38,4 +38,7 @@ public class User {
     public boolean inReviewed(String id){
         return reviewedRests.contains(id);
     }
+    public List<String> getReviewedRests(){
+        return reviewedRests;
+    }
 }

@@ -120,6 +120,7 @@ public class AppBuilder {
     public AppBuilder addMenuView() {
         menuViewModel = new MenuViewModel();
         menuView = new MenuView(menuViewModel);
+        menuView.setViewManagerModel(viewManagerModel);
         cardPanel.add(menuView, menuView.getViewName());
         return this;
     }

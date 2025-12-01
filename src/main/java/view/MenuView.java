@@ -8,6 +8,7 @@ import interface_adaptor.menu.ViewMenuController;
 import interface_adaptor.view_ratings.ViewRatingsController;
 import interface_adaptor.view_ratings.ViewRatingsState;
 import interface_adaptor.view_ratings.ViewRatingsViewModel;
+import interface_adaptor.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,7 @@ import java.beans.PropertyChangeListener;
 public class MenuView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "menu";
     private final MenuViewModel menuViewModel;
+    private ViewManagerModel viewManagerModel;
 
     // View Ratings Components
     private ViewRatingsController viewRatingsController;
@@ -42,6 +44,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     private interface_adaptor.menu.MenuSearchController menuSearchController;
     private final JTextField searchField = new JTextField(15);
     private final JButton searchButton = new JButton("Search");
+    private final JButton backButton = new JButton("← Back to Search");
     private ViewMenuController viewMenuController;
 
     // User information
@@ -138,11 +141,32 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
             }
         });
 
+        // Back Button Listener
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                System.out.println("Back button clicked!");
+                System.out.println("viewManagerModel is null: " + (viewManagerModel == null));
+                if (viewManagerModel != null) {
+                    System.out.println("Setting state to SearchView");
+                    viewManagerModel.setState("SearchView");
+                    viewManagerModel.firePropertyChange();
+                    System.out.println("State changed");
+                } else {
+                    System.out.println("ViewManagerModel is NULL!");
+                }
+            }
+        });
+
         // Search panel
         final JPanel searchPanel = new JPanel();
         searchPanel.add(new JLabel("Search item:"));
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
+
+        // Back button panel
+        final JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        backPanel.add(backButton);
 
         JPanel topUserPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topUserPanel.add(username);
@@ -154,6 +178,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         bottomButtons.add(viewReviews);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(backPanel);
         this.add(title);
         this.add(topUserPanel);
         this.add(restaurantInfo);
@@ -239,5 +264,9 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
     public void setViewRatingsViewModel(ViewRatingsViewModel viewModel) {
         this.viewRatingsViewModel = viewModel;
         this.viewRatingsViewModel.addPropertyChangeListener(this);
+    }
+
+    public void setViewManagerModel(ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
     }
 }

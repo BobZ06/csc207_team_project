@@ -22,8 +22,8 @@ class ViewMenuInteractorTest {
 
         @Override
         public JSONObject getRestaurantMenu(String restaurantName, String zipCode) throws Exception {
-            this.lastName = restaurantName;
-            this.lastZip = zipCode;
+            lastName = restaurantName;
+            lastZip = zipCode;
             if (toThrow != null) {
                 throw toThrow;
             }
@@ -55,6 +55,7 @@ class ViewMenuInteractorTest {
 
         ViewMenuInputData input = new ViewMenuInputData(
                 "Test Restaurant",
+                "REST-ID",
                 "12345",
                 "123 Street",
                 4.2
@@ -64,9 +65,12 @@ class ViewMenuInteractorTest {
 
         assertEquals("Test Restaurant", dao.lastName);
         assertEquals("12345", dao.lastZip);
+
         assertNotNull(presenter.lastSuccess);
         assertNull(presenter.lastError);
+
         assertEquals("Test Restaurant", presenter.lastSuccess.getRestaurantName());
+        assertEquals("REST-ID", presenter.lastSuccess.getRestaurantId());
         assertEquals("123 Street", presenter.lastSuccess.getRestaurantAddress());
         assertEquals(4.2, presenter.lastSuccess.getRestaurantRating());
         assertNotNull(presenter.lastSuccess.getMenuData());
@@ -81,6 +85,7 @@ class ViewMenuInteractorTest {
 
         ViewMenuInputData input = new ViewMenuInputData(
                 "Bad Restaurant",
+                "REST-BAD",
                 "00000",
                 "Nowhere",
                 1.0
@@ -94,7 +99,7 @@ class ViewMenuInteractorTest {
     }
 
     @Test
-    void execute_passesRestaurantFieldsToOutputExactly() {
+    void execute_passesExactlySameRestaurantFieldsToOutput() {
         StubMenuDAO dao = new StubMenuDAO();
         dao.toReturn = new JSONObject().put("menuItems", new JSONArray());
         StubPresenter presenter = new StubPresenter();
@@ -102,6 +107,7 @@ class ViewMenuInteractorTest {
 
         ViewMenuInputData input = new ViewMenuInputData(
                 "Name With Spaces & #",
+                "REST-XYZ",
                 "A1B2C3",
                 "Unit 5, 123 King St.",
                 3.75
@@ -111,6 +117,7 @@ class ViewMenuInteractorTest {
 
         assertNotNull(presenter.lastSuccess);
         assertEquals("Name With Spaces & #", presenter.lastSuccess.getRestaurantName());
+        assertEquals("REST-XYZ", presenter.lastSuccess.getRestaurantId());
         assertEquals("Unit 5, 123 King St.", presenter.lastSuccess.getRestaurantAddress());
         assertEquals(3.75, presenter.lastSuccess.getRestaurantRating());
     }

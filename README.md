@@ -9,14 +9,14 @@ This project strictly adheres to **Clean Architecture** principles, ensuring a s
 
 All User Stories have been successfully implemented and tested.
 
-| Team Member | Feature / User Story          | Description | Status |
-| :--- |:------------------------------| :--- | :--- |
-| **Ruhan Kiani** | **Restaurant Search**         | Search for dining options near a specific address using Geocoding & Yelp Fusion API. | **Completed** |
-| **Vignesh Khajuria** | **View Menu**          | Retrieve and display detailed menu items and prices via Spoonacular API. | **Completed** |
-| **Mertali Muhsin Tercan** | **Search Menu Items**  | Filter and search for specific food items (e.g., "burger", "vegan") within a restaurant's menu. | **Completed** |
-| **Bowen Zhao** | **View Reviews**       | Fetch and display user reviews and ratings from the Yelp API. | **Completed** |
-| **Arthur Jiang** | **Rate Restaurant**    | Allow users to submit their own 1-5 star ratings, persisted to a local CSV database. | **Completed** |
-| **Team** | **User Management**           | Secure Login and Signup functionality with password verification and user session management. | **Completed** |
+| Team Member | Feature / User Story          | Description |
+| :--- |:------------------------------| :--- |
+| **Ruhan Kiani** | **Restaurant Search**         | Search for dining options near a specific address using Geocoding & Yelp Fusion API. |
+| **Vignesh Khajuria** | **View Menu**          | Retrieve and display detailed menu items and prices via Spoonacular API. |
+| **Mertali Muhsin Tercan** | **Search Menu Items**  | Filter and search for specific food items (e.g., "burger", "vegan") within a restaurant's menu. |
+| **Bowen Zhao** | **View Reviews**       | Fetch and display user reviews and ratings from the Yelp API. |
+| **Arthur Jiang** | **Rate Restaurant**    | Allow users to submit their own 1-5 star ratings, persisted to a local CSV database. |
+| **Team** | **User Management**           | Secure Login and Signup functionality with password verification and user session management. |
 
 ## Technical Architecture & Design
 The application is built using **Java** and **Swing** for the GUI, following the **Clean Architecture** pattern:

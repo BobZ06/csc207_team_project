@@ -1,58 +1,39 @@
-# Fork & Code - Food Finder App
+# Food Finder App
 
 ## Project Summary
-Food Finder is a desktop application designed to help users find dining options. It aggregates data from multiple APIs to allow users to search for restaurants by location, view detailed menus with prices, read Yelp reviews, and make their own ratings.
+Food Finder is a desktop application designed to streamline the dining experience. By aggregating data from three APIs (Yelp, Google Maps, Spoonacular), the app allows users to search for restaurants by location, explore detailed menus with real-time pricing, read authentic user reviews, and manage their own ratings and user profile.
+
+This project strictly adheres to **Clean Architecture** principles, ensuring a separation of concerns between the UI, business logic, and data access layers.
 
 ## Team Members & User Stories
 
-| Team Member | Feature / User Story | Status                    |
-| :--- | :--- |:--------------------------|
-| **Ruhan Kiani** | **Search Restaurants by Location** (User Story #1)<br>Find dining options near a specific address using Google Maps & Yelp. | In Progress               |
-| **Vignesh Khajuria** | **View Restaurant Menu** (User Story #2)<br>View detailed menu items and prices (via Spoonacular). | In Progress               |
-| **Mertali Muhsin Tercan** | **Search Menu Items** (User Story #3)<br>Search for specific food (e.g., "burger") within a menu. | In Progress               |
-| **Bowen Zhao** | **View Yelp Reviews** (User Story #4)<br>Retrieve and display reviews/ratings from Yelp API. | Done (100% Test Coverage) |
-| **Arthur Jiang** | **Rate a Restaurant** (User Story #5)<br>Allow users to rate a restaurant (1-5 stars) and save to local DB. | Done (100% Test Coverage) |
+All User Stories have been successfully implemented and tested.
 
-> **Note:** We also have **Login/Signup** implemented to support User Story #5.
+| Team Member | Feature / User Story          | Description |
+| :--- |:------------------------------| :--- |
+| **Ruhan Kiani** | **Restaurant Search**         | Search for dining options near a specific address using Geocoding & Yelp Fusion API. |
+| **Vignesh Khajuria** | **View Menu**          | Retrieve and display detailed menu items and prices via Spoonacular API. |
+| **Mertali Muhsin Tercan** | **Search Menu Items**  | Filter and search for specific food items (e.g., "burger", "vegan") within a restaurant's menu. |
+| **Bowen Zhao** | **View Reviews**       | Fetch and display user reviews and ratings from the Yelp API. |
+| **Arthur Jiang** | **Rate Restaurant**    | Allow users to submit their own 1-5 star ratings, persisted to a local CSV database. |
+| **Team** | **User Management**           | Secure Login and Signup functionality with password verification and user session management. |
 
-## API & Data Configuration
-We use the following APIs:
-1.  **Yelp Fusion API:** For restaurant search, details, and reviews.
-2.  **Google Maps API:** For geocoding addresses to coordinates.
-3.  **Spoonacular API:** For retrieving menu items and prices.
+## Technical Architecture & Design
+The application is built using **Java** and **Swing** for the GUI, following the **Clean Architecture** pattern:
+- **Entity Layer:** Core business objects (`Restaurant`, `User`, `MenuItem`).
+- **Use Case Layer:** Business rules and application logic (Interactors).
+- **Interface Adapters:** Controllers, Presenters, and ViewModels that convert data between the View and Use Cases.
+- **Data Access:** Implementations for external APIs (Yelp, Google, Spoonacular) and local storage (CSV).
 
-### Important: How to Run
-To run the application, you must configure your API keys locally:
-1.  Locate `src/main/resources/config.properties.template`.
-2.  Duplicate it and rename the file to `config.properties`.
-3.  Paste your API keys into the corresponding fields.
-    * *Note: `config.properties` is ignored by Git to protect API keys. DO NOT COMMIT IT.*
 
-## Current Progress & To-Do List
-**Goal:** Achieve 100% Code Coverage for **Use Case (Interactor)** and **Entity** layers.
+## API Configuration
+To run the application, you must verify your API keys. **Note:** Sensitive keys are not committed to Git.
 
-### 1. Entity Layer Tests
-- [x] **Restaurant:** `RestaurantTest.java` is complete (100% coverage).
-- [ ] **User:** Need to create `UserTest.java`.
-- [ ] **MenuItem:** Need to create `MenuItemTest.java`.
-- [ ] **FoodFinderApp:** Need to create `FoodFinderAppTest.java`.
-
-### 2. Use Case Layer Tests
-- [x] **View Ratings:** `ViewRatingsInteractorTest.java` is complete (100% coverage).
-- [x] **Star Rate:** `starRateTest.java` is complete (100% coverage).
-- [x] **Login:** `LoginTest.java` is complete (100% coverage).
-- [x] **Signup:** `SignupTest.java` is complete (100% coverage).
-- [ ] **Menu Search:** Need `MenuSearchInteractorTest.java`.
-
-### 3. How to Check Coverage
-1.  In IntelliJ, right-click the `test/java` folder.
-2.  Select **"Run 'All Tests' with Coverage"**.
-3.  Ensure `entity` package and `use_case` package show 100%.
-
-## Project Structure
-- `src/main/java/app`: Main entry point.
-- `src/main/java/data_access`: API implementations (Yelp, Google, Spoonacular).
-- `src/main/java/entity`: All entity used in the project.
-- `src/main/java/interface_adaptor`: Controllers, Presenters, and ViewModels.
-- `src/main/java/use_case`: Interactors.
-- `src/main/java/view`: UI components.
+1. Locate `src/main/resources/config.properties.template`.
+2. Copy/Rename this file to `src/main/resources/config.properties`.
+3. Enter your valid API keys in the file:
+   ```properties
+   yelp.api.key=YOUR_YELP_API_KEY
+   google.api.key=YOUR_GOOGLE_MAPS_API_KEY
+   spoonacular.api.key=YOUR_SPOONACULAR_API_KEY
+   spoonacular.host=api.spoonacular.com
